@@ -19,7 +19,7 @@ Related R packages include: [HazReg](https://github.com/FJRubio67/HazReg) and [s
 
 ##  Net Survival Analysis: Parametric Models
 
-The slides for Lecture II can be found at [Lecture II](https://drive.google.com/file/d/1XbUBMegGNMcwWg5yy7Ec9wDk7P6ivaLF/view?usp=share_link)
+The slides for Lecture II can be found at [Lecture II](https://drive.google.com/file/d/1XbUBMegGNMcwWg5yy7Ec9wDk7P6ivaLF/view?usp=share_link).
 
 The aims of this lecture are:
 
