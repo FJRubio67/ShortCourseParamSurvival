@@ -15,7 +15,7 @@ Tha aims of this lecture are:
 - To present software tools for survival analysis and a real data example.
 - To discuss other parametric, semiparametric and non parametric alternatives.
 
-Related R packages and code include: [HazReg](https://github.com/FJRubio67/HazReg) and [survival](https://cran.r-project.org/web/packages/survival/index.html). 
+Related R packages include: [HazReg](https://github.com/FJRubio67/HazReg) and [survival](https://cran.r-project.org/web/packages/survival/index.html). 
 
 See also [Example: no covariates](https://rpubs.com/FJRubio/PSM), and [Example: Regression](https://rpubs.com/FJRubio/PSRM).
 
