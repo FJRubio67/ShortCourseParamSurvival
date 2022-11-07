@@ -2,6 +2,8 @@
 
 This repository contains the materials associated to my short course on parametric models for the analysis of survival data. The material covers parametric models for Overall and Relative survival, as well as several software tools to implement these sorts of models.
 
+Course length: 3-4 hours.
+
 ##  Survival Analysis: Parametric Models
 
 The slides for Lecture I can be found at [Lecture I](https://drive.google.com/file/d/1TOTOyIgBMOmTmweqkLvARrYyONp88Hu7/view?usp=share_link).
