@@ -15,7 +15,9 @@ Tha aims of this lecture are:
 - To present software tools for survival analysis and a real data example.
 - To discuss other parametric, semiparametric and non parametric alternatives.
 
-Related R packages and code include: [HazReg](https://github.com/FJRubio67/HazReg) and [survival](https://cran.r-project.org/web/packages/survival/index.html). See also [Example: no covariates](https://rpubs.com/FJRubio/PSM), and [Example: Regression](https://rpubs.com/FJRubio/PSRM).
+Related R packages and code include: [HazReg](https://github.com/FJRubio67/HazReg) and [survival](https://cran.r-project.org/web/packages/survival/index.html). 
+
+See also [Example: no covariates](https://rpubs.com/FJRubio/PSM), and [Example: Regression](https://rpubs.com/FJRubio/PSRM).
 
 ##  Net Survival Analysis: Parametric Models
 
@@ -29,3 +31,5 @@ The aims of this lecture are:
 - To discuss a challenge in the relative survival framework.
 
 Related R packages include: [GHSurv](https://github.com/FJRubio67/GHSurv), [GJRM](https://github.com/FJRubio67/LBANS), and [SimLT](https://github.com/FJRubio67/SimLT).
+
+See also: [Parametric Excess Hazard Estimation: Proportional Hazards](https://rpubs.com/FJRubio/GHPH), and [Parametric Excess Hazard Estimation: General Hazards](https://rpubs.com/FJRubio/GHGH).
