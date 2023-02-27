@@ -34,4 +34,5 @@ The aims of this lecture are:
 
 Related R packages include: [GHSurv](https://github.com/FJRubio67/GHSurv), [GJRM](https://github.com/FJRubio67/LBANS), and [SimLT](https://github.com/FJRubio67/SimLT).
 
-See also: [Parametric Excess Hazard Estimation: Proportional Hazards](https://rpubs.com/FJRubio/GHPH), and [Parametric Excess Hazard Estimation: General Hazards](https://rpubs.com/FJRubio/GHGH).
+See also: [Parametric Excess Hazard Estimation: Proportional Hazards](https://rpubs.com/FJRubio/GHPH), and [Parametric Excess Hazard Estimation: General Hazards](https://rpubs.com/FJRubio/GHGH), [The Cox Proportional Hazards Model
+](https://rpubs.com/FJRubio/CPHM).
