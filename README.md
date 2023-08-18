@@ -32,7 +32,7 @@ The aims of this lecture are:
 - To present an application in cancer epidemiology.
 - To discuss a challenge in the relative survival framework.
 
-Related R packages include: [GHSurv](https://github.com/FJRubio67/GHSurv), [GJRM](https://github.com/FJRubio67/LBANS), and [SimLT](https://github.com/FJRubio67/SimLT).
+Related R packages include: [HazReg](https://github.com/FJRubio67/HazReg), [GHSurv](https://github.com/FJRubio67/GHSurv), [GJRM](https://github.com/FJRubio67/LBANS), and [SimLT](https://github.com/FJRubio67/SimLT).
 
 See also: [Parametric Excess Hazard Estimation: Proportional Hazards](https://rpubs.com/FJRubio/GHPH), and [Parametric Excess Hazard Estimation: General Hazards](https://rpubs.com/FJRubio/GHGH), [The Cox Proportional Hazards Model
 ](https://rpubs.com/FJRubio/CPHM).
