@@ -6,8 +6,8 @@ Course length: 3-4 hours.
 
 ##  Survival Analysis: Parametric Models
 
-The slides for Lecture I can be found at [Lecture I](https://drive.google.com/file/d/1TOTOyIgBMOmTmweqkLvARrYyONp88Hu7/view?usp=share_link).
 
+The slides for this lecture are `Lecture1.pdf`. Additional material can be found in the file `Hazard-Based regression models - Overview.pdf`.
 
 Tha aims of this lecture are:
 
