@@ -1,0 +1,83 @@
+---
+title: " ``AFT model: log-linear regression to hazard-base formulation'' "
+author: "--"
+#date: "`r Sys.Date()`"
+#date: "--"
+format:
+  html:
+    toc: true
+    code-fold: true
+  pdf: default
+  docx: default
+editor: visual
+bibliography: references.bib
+---
+
+# AFT model: hazard formulation to log-linear formulation
+
+The AFT model in the log-linear formulation is defined as:
+
+$$
+\log(T_i) = \beta_0 + x_{i}^{\top}{\beta} + \sigma \epsilon_i,
+$$
+
+where $\epsilon_i \sim F$ is a fully-specified distribution, and $\sigma$ is a scale parameter. Then,
+
+$$
+T_i = \exp\{ \beta_0 + x_{i}^{\top}{\beta}\}\exp\{\sigma \epsilon_i\}.
+$$
+
+Consequently, the survival function is:
+
+\begin{align*}
+S(t \mid x_i) &= \Pr(T_i > t) \\
+&= \Pr(\exp\{ \beta_0 + x_{i}^{\top}{\beta}\}\exp\{\sigma \epsilon_i\} > t \mid x_i) \\
+&= \Pr\left(\epsilon_i > \dfrac{\log(t) - \beta_0 - x_i^{\top}\beta}{\sigma} \mid x_i\right)\\
+&= 1 - F\left(\dfrac{\log(t) - \beta_0 - x_i^{\top}\beta}{\sigma}\right).
+\end{align*}
+
+Then, the density function is
+
+\begin{align*}
+f(t \mid x_i) &=  \dfrac{1}{\sigma t}f\left(\dfrac{\log(t) - \beta_0  - x_i^{\top}\beta}{\sigma}\right).
+\end{align*}
+
+Therefore, the hazard function is:
+
+\begin{align*}
+h(t \mid x_i) &= \dfrac{f(t \mid x_i)}{S(t \mid x_i)} = \dfrac{\dfrac{1}{\sigma t}f\left(\dfrac{\log(t) - \beta_0  - x_i^{\top}\beta}{\sigma}\right)}{1 - F\left(\dfrac{\log(t) - \beta_0 - x_i^{\top}\beta}{\sigma}\right)}.
+\end{align*}
+
+The baseline hazard represents the model with $x_i = 0$, which is
+
+\begin{align*}
+h_0(t) &= \dfrac{\dfrac{1}{\sigma t}f\left(\dfrac{\log(t) - \beta_0 }{\sigma}\right)}{1 - F\left(\dfrac{\log(t) - \beta_0}{\sigma}\right)}.
+\end{align*}
+
+Then, we get the hazard-base formulation (we need to multiply by $\exp\{ - x_i^{\top}\beta\}$ to compensate for the same term in the denominator):
+
+\begin{align*}
+h(t \mid x_i) &= h_0\left( t\exp\{ - x_i^{\top}\beta\}\right)\exp\{ - x_i^{\top}\beta\}.
+\end{align*}
+
+By reparameterising $\theta = -\beta$ we obtain the classical expression:
+
+\begin{align*}
+h(t \mid x_i) &= h_0\left( t\exp\{  x_i^{\top}\theta\}\right)\exp\{  x_i^{\top}\theta\}.
+\end{align*}
+
+# AFT model: interpretation of regression coefficients.
+
+The corresponding cumulative hazard function is:
+
+\begin{align*}
+H(t \mid x_i) &= H_0\left( t\exp\{  x_i^{\top}\theta\}\right).
+\end{align*}
+
+Consequently, the corresponding survival function is:
+
+\begin{align*}
+S(t \mid x_i) &= \exp\left[-H_0\left( t\exp\{  x_i^{\top}\theta\}\right)\right]\\
+ &= S_0\left( t\exp\{  x_i^{\top}\theta\}\right).
+\end{align*}
+

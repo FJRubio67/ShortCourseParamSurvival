@@ -1,0 +1,47 @@
+\begin{thebibliography}{6}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Chen and Jewell(2001)]{C01}
+Y.Q. Chen and N.P. Jewell.
+\newblock On a general class of semiparametric hazards regression models.
+\newblock \emph{Biometrika}, 88\penalty0 (3):\penalty0 687--702, 2001.
+
+\bibitem[Eletti et~al.(2022)]{eletti:2022}
+A.~Eletti et~al.
+\newblock A unifying framework for flexible excess hazard modelling with
+  applications in cancer epidemiology.
+\newblock \emph{Journal of Royal Statistical Society: Series C}, 2022.
+
+\bibitem[Mudholkar et~al.(1996)Mudholkar, Srivastava, and Kollia]{M96}
+G.S. Mudholkar, D.K. Srivastava, and G.D. Kollia.
+\newblock A generalization of the {W}eibull distribution with application to
+  the analysis of survival data.
+\newblock \emph{Journal of the {A}merican {S}tatistical {A}ssociation},
+  91\penalty0 (436):\penalty0 1575--1583, 1996.
+
+\bibitem[Pohar-Perme et~al.(2012)Pohar-Perme, Stare, and Est{\`e}ve]{PS12}
+M.~Pohar-Perme, J.~Stare, and J.~Est{\`e}ve.
+\newblock On estimation in relative survival.
+\newblock \emph{Biometrics}, 68\penalty0 (1):\penalty0 113--120, 2012.
+
+\bibitem[Rubio et~al.(2019{\natexlab{a}})Rubio, Rachet, Giorgi, Maringe, and
+  Belot]{R19}
+F.J. Rubio, B.~Rachet, R.~Giorgi, C.~Maringe, and A.~Belot.
+\newblock On models for the estimation of the excess mortality hazard in case
+  of insufficiently stratified life tables.
+\newblock \emph{Biostatistics}, na\penalty0 (na):\penalty0 na--na,
+  2019{\natexlab{a}}.
+
+\bibitem[Rubio et~al.(2019{\natexlab{b}})Rubio, Remontet, Jewell, and
+  Belot]{R18}
+F.J. Rubio, L.~Remontet, N.P. Jewell, and A.~Belot.
+\newblock On a general structure for hazard-based regression models: an
+  application to population-based cancer research.
+\newblock \emph{Statistical Methods in Medical Research}, 28:\penalty0
+  2404--2417, 2019{\natexlab{b}}.
+
+\end{thebibliography}

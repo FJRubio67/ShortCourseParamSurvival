@@ -1,0 +1,31 @@
+\begin{thebibliography}{4}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Cox(1972)]{cox:1972}
+D.R. Cox.
+\newblock Regression models and life-tables.
+\newblock \emph{Journal of the Royal Statistical Society. Series B},
+  34\penalty0 (2):\penalty0 187--220, 1972.
+
+\bibitem[Harrell(2015)]{harrell:2015}
+F.E. Harrell.
+\newblock \emph{Regression modeling strategies: with applications to linear
+  models, logistic and ordinal regression, and survival analysis}.
+\newblock Springer, 2015.
+
+\bibitem[Kalbfleisch and Prentice(2011)]{KP11}
+J.D. Kalbfleisch and R.L. Prentice.
+\newblock \emph{The Statistical Analysis of Failure Time Data}, volume 360.
+\newblock John Wiley \& Sons, 2011.
+
+\bibitem[Klein et~al.(2016)Klein, Van-Houwelingen, Ibrahim, and
+  Scheike]{klein:2016}
+J.P. Klein, H.C. Van-Houwelingen, J.G. Ibrahim, and T.H. Scheike.
+\newblock \emph{Handbook of Survival Analysis}.
+\newblock CRC Press, 2016.
+
+\end{thebibliography}

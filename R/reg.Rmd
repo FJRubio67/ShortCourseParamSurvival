@@ -1,0 +1,77 @@
+---
+title: 'Example: Regression'
+author: '[F. Javier Rubio](https://sites.google.com/site/fjavierrubio67/)'
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+## Lognormal Baseline
+```{r}
+rm(list=ls())
+# Required packages
+library(survival)
+library(flexsurv)
+library(eha)
+
+# lung cancer data set
+data(lung)
+?lung
+head(lung)
+
+# AFT model using a lognormal baseline distribution
+fit.aft <- aftreg(formula = Surv(time, status) ~ age + sex, data = lung,
+                         dist = "lognormal")
+
+summary(fit.aft)
+
+# PH model using a lognormal baseline distribution
+fit.ph <- phreg(formula = Surv(time, status) ~ age + sex , data = lung,
+                dist = "lognormal")
+
+summary(fit.ph)
+
+# Comparison of the three models using AIC
+AIC.aft <- -2*(fit.aft$loglik[2]) + 2*length(fit.aft$coefficients)
+AIC.ph <- -2*(fit.ph$loglik[2]) + 2*length(fit.ph$coefficients)
+
+AIC.aft
+AIC.ph
+
+# Comparison 
+plot(fit.aft)
+plot(fit.ph)
+
+
+```
+
+# Weibull Baseline
+
+```{r}
+rm(list=ls())
+# Required packages
+library(survival)
+library(flexsurv)
+library(eha)
+
+# lung cancer data set
+data(lung)
+?lung
+head(lung)
+
+# AFT model using a lognormal baseline distribution
+fit.aft <- aftreg(formula = Surv(time, status) ~ age + sex, data = lung,
+                  dist = "weibull")
+# PH model using a lognormal baseline distribution
+fit.ph <- phreg(formula = Surv(time, status) ~ age + sex , data = lung,
+                dist = "weibull")
+
+# Comparison of the three models using AIC
+AIC.aft <- -2*(fit.aft$loglik[2]) + 2*length(fit.aft$coefficients)
+AIC.ph <- -2*(fit.ph$loglik[2]) + 2*length(fit.ph$coefficients)
+
+AIC.aft
+AIC.ph
+
+# Comparison 
+plot(fit.aft)
+plot(fit.ph)
+```
