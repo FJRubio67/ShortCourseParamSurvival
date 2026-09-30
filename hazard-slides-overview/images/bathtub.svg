@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="648pt" height="302.4pt" viewBox="0 0 648 302.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-30T19:31:58.260243</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 302.4 
+L 648 302.4 
+L 648 0 
+L 0 0 
+L 0 302.4 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 39.64 262.76 
+L 629.64 262.76 
+L 629.64 18.36 
+L 39.64 18.36 
+L 39.64 262.76 
+z
+" style="fill: none"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 39.64 262.76 
+L 169.44 262.76 
+L 169.44 18.36 
+L 39.64 18.36 
+z
+" clip-path="url(#pbc321bc647)" style="fill: #23767e; opacity: 0.08"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 464.44 262.76 
+L 629.64 262.76 
+L 629.64 18.36 
+L 464.44 18.36 
+z
+" clip-path="url(#pbc321bc647)" style="fill: #e3661b; opacity: 0.08"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="text_1">
+     <text style="font-size: 17px; font-family: 'IBM Plex Sans', 'Helvetica Neue', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #1d2b45" x="334.64" y="279.677344" transform="rotate(-0 334.64 279.677344)">Time in service</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="text_2">
+     <text style="font-size: 17px; font-family: 'IBM Plex Sans', 'Helvetica Neue', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #1d2b45" x="32.104531" y="140.56" transform="rotate(-90 32.104531 140.56)">Hazard  h(t)</text>
+    </g>
+   </g>
+   <g id="line2d_1">
+    <path d="M 44.20437 -1 
+L 45.14995 27.251194 
+L 46.13394 49.465395 
+L 47.11793 66.997959 
+L 48.10192 81.281242 
+L 49.08591 93.201072 
+L 50.0699 103.338266 
+L 51.05389 112.091465 
+L 52.03788 119.74452 
+L 54.00586 132.531991 
+L 55.97384 142.835756 
+L 57.94182 151.346372 
+L 59.9098 158.511476 
+L 61.87778 164.635849 
+L 63.84576 169.935295 
+L 65.81374 174.567589 
+L 67.78172 178.651197 
+L 69.749699 182.277088 
+L 71.717679 185.516481 
+L 73.685659 188.426068 
+L 75.653639 191.051638 
+L 78.605609 194.537595 
+L 81.557579 197.567894 
+L 84.509549 200.219867 
+L 87.461519 202.554107 
+L 90.413489 204.618869 
+L 93.365459 206.453133 
+L 97.301419 208.59455 
+L 101.237379 210.443078 
+L 105.173339 212.046694 
+L 109.109299 213.443783 
+L 114.029249 214.946523 
+L 118.949199 216.223412 
+L 124.853139 217.511118 
+L 130.757078 218.580668 
+L 137.645008 219.606159 
+L 145.516928 220.544436 
+L 154.372838 221.367185 
+L 164.212738 222.05905 
+L 176.020618 222.65612 
+L 189.796477 223.113659 
+L 205.540317 223.402425 
+L 223.252137 223.496907 
+L 241.947947 223.372825 
+L 260.643756 223.028324 
+L 278.355576 222.484567 
+L 295.083406 221.750283 
+L 310.827245 220.831662 
+L 325.587095 219.737358 
+L 339.362955 218.481053 
+L 352.154825 217.082586 
+L 363.962705 215.568152 
+L 374.786594 213.969864 
+L 385.610484 212.149631 
+L 395.450384 210.283892 
+L 405.290284 208.199164 
+L 415.130184 205.876921 
+L 423.986093 203.567667 
+L 432.842003 201.035167 
+L 441.697913 198.263686 
+L 450.553823 195.236755 
+L 458.425743 192.317799 
+L 466.297663 189.170814 
+L 474.169583 185.782719 
+L 482.041503 182.139933 
+L 489.913422 178.228377 
+L 496.801352 174.573831 
+L 503.689282 170.692239 
+L 510.577212 166.573189 
+L 517.465142 162.205953 
+L 524.353072 157.579488 
+L 531.241002 152.682421 
+L 538.128932 147.503058 
+L 545.016861 142.029366 
+L 551.904791 136.248978 
+L 558.792721 130.149186 
+L 565.680651 123.716932 
+L 572.568581 116.93881 
+L 579.456511 109.801056 
+L 585.360451 103.386046 
+L 591.264391 96.68734 
+L 597.168331 89.695628 
+L 603.07227 82.401403 
+L 608.97621 74.794954 
+L 614.88015 66.866362 
+L 620.78409 58.605502 
+L 626.68803 50.002039 
+L 629.64 45.568544 
+L 629.64 45.568544 
+" clip-path="url(#pbc321bc647)" style="fill: none; stroke: #1d2b45; stroke-width: 3; stroke-linecap: square"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 39.64 262.76 
+L 39.64 18.36 
+" style="fill: none; stroke: #1d2b45; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 39.64 262.76 
+L 629.64 262.76 
+" style="fill: none; stroke: #1d2b45; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_3">
+    <text style="font-weight: 700; font-size: 19px; font-family: 'IBM Plex Sans', 'Helvetica Neue', 'Arial', 'DejaVu Sans'; text-anchor: start; fill: #23767e" x="60.29" y="41.2725" transform="rotate(-0 60.29 41.2725)">Early failures</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 15.5px; font-family: 'IBM Plex Sans', 'Helvetica Neue', 'Arial', 'DejaVu Sans'; text-anchor: start; fill: #23767e" x="60.29" y="64.185" transform="rotate(-0 60.29 64.185)">defects, poor installation</text>
+   </g>
+   <g id="text_5">
+    <text style="font-weight: 700; font-size: 19px; font-family: 'IBM Plex Sans', 'Helvetica Neue', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #1d2b45" x="293.34" y="183.33" transform="rotate(-0 293.34 183.33)">Random failures</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 11.5px; font-family: 'IBM Plex Sans', 'Helvetica Neue', 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #1d2b45" x="293.34" y="200.1325" transform="rotate(-0 293.34 200.1325)">accidental loads, third-party damage</text>
+   </g>
+   <g id="text_7">
+    <text style="font-weight: 700; font-size: 19px; font-family: 'IBM Plex Sans', 'Helvetica Neue', 'Arial', 'DejaVu Sans'; text-anchor: end; fill: #e3661b" x="555.89" y="41.2725" transform="rotate(-0 555.89 41.2725)">Wear-out</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 15.5px; font-family: 'IBM Plex Sans', 'Helvetica Neue', 'Arial', 'DejaVu Sans'; text-anchor: end; fill: #e3661b" x="555.89" y="64.185" transform="rotate(-0 555.89 64.185)">corrosion, fatigue, ageing</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pbc321bc647">
+   <rect x="39.64" y="18.36" width="590" height="244.4"/>
+  </clipPath>
+ </defs>
+</svg>

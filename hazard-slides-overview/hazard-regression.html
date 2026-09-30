@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="hazard-regression_files/libs/clipboard/clipboard.min.js"></script>
+<script src="hazard-regression_files/libs/quarto-html/tabby.min.js"></script>
+<script src="hazard-regression_files/libs/quarto-html/popper.min.js"></script>
+<script src="hazard-regression_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="hazard-regression_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="hazard-regression_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="hazard-regression_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="hazard-regression_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.5.55">
+
+  <meta name="author" content="Francisco Javier Rubio">
+  <title>Hazard-based regression models</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="hazard-regression_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="hazard-regression_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="hazard-regression_files/libs/revealjs/dist/theme/quarto.css">
+  <link href="hazard-regression_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="hazard-regression_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="hazard-regression_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="hazard-regression_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script type="module" src="hazard-regression_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+  <link href="hazard-regression_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-color="#1D2B45" data-background-image="images/title-curve.svg" data-background-opacity="0.9" data-background-position="bottom" data-background-size="100% auto" class="quarto-title-block center">
+  <h1 class="title">Hazard-based regression models</h1>
+  <p class="subtitle">An overview of survival analysis for engineers</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Francisco Javier Rubio 
+</div>
+        <p class="quarto-title-affiliation">
+            Department of Statistical Science, University College London
+          </p>
+    </div>
+</div>
+
+</section>
+<section id="by-the-end-of-this-session-you-should-be-able-to" class="slide level2">
+<h2>By the end of this session you should be able to</h2>
+<div>
+<ul>
+<li class="fragment">Recognise <strong>time-to-event data</strong> in engineering problems and explain why <strong>censoring</strong> needs special treatment.</li>
+<li class="fragment">Define the <strong>survival</strong> and <strong>hazard</strong> functions and interpret common hazard shapes.</li>
+<li class="fragment">Describe how covariates enter hazard models: <strong>proportional hazards (PH)</strong>, <strong>accelerated failure time (AFT)</strong>, <strong>accelerated hazards (AH)</strong>, and the <strong>general hazard (GH)</strong> structure that unifies them.</li>
+<li class="fragment">Outline how parametric hazard models are fitted and compared, and where to find software.</li>
+</ul>
+</div>
+<aside class="notes">
+<p>~1 min. Frame the session as an overview: the aim is vocabulary and intuition, not derivations.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="time-to-event-data-are-everywhere" class="slide level2">
+<h2>Time-to-event data are everywhere</h2>
+<p>Survival analysis is used in medicine, epidemiology, genetics, biology, and <strong>engineering</strong>, where it is usually called <strong>reliability analysis</strong>. The mathematics is the same.</p>
+<div class="columns">
+<div class="column fragment fade-up" style="width:50%;">
+<!-- -->
+<h3 id="in-civil-engineering">In civil engineering</h3>
+<ul>
+<li>Time until a <strong>water main</strong> bursts</li>
+<li>Time until <strong>pavement cracking</strong> reaches an intervention threshold</li>
+<li>Time to <strong>corrosion initiation</strong> in reinforced concrete</li>
+<li>Load cycles until a <strong>fatigue crack</strong> appears in a welded joint</li>
+</ul>
+</div><div class="column fragment fade-up" style="width:50%;">
+<!-- -->
+<h3 id="the-common-thread">The common thread</h3>
+<p>The outcome is a <strong>duration</strong>: how long until something happens.</p>
+<p>We rarely observe every failure. Some assets are still in service when we stop watching.</p>
+</div></div>
+<aside class="notes">
+<p>~2 min. Ask the class for one more example from their own modules (e.g.&nbsp;bridge bearings, geotextile degradation).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-survival-function" class="slide level2">
+<h2>The survival function</h2>
+<p><span class="math display">\[
+S(t) = P(T &gt; t)
+\]</span></p>
+<p>The probability that a component is <strong>still working beyond time <span class="math inline">\(t\)</span></strong>.</p>
+<div>
+<ul>
+<li class="fragment"><span class="math inline">\(S(0) = 1\)</span> and <span class="math inline">\(S(t)\)</span> decreases as <span class="math inline">\(t\)</span> grows.</li>
+<li class="fragment">Answers questions such as: <em>what proportion of our pipes will still be in service after 50 years?</em></li>
+<li class="fragment">It tells us <strong>how many</strong> survive, but not <strong>how the risk of failure changes over time</strong>. For that we need the hazard.</li>
+</ul>
+</div>
+<aside class="notes">
+<p>~1.5 min.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-hazard-function" class="slide level2">
+<h2>The hazard function</h2>
+<p>Assets are exposed to many <strong>forces of failure</strong>: ageing, corrosion, fatigue, overloading, floods, accidental damage…</p>
+<div class="fragment fade-up">
+<p>The hazard quantifies these forces <strong>at each time point <span class="math inline">\(t &gt; 0\)</span></strong>, among the items that have survived so far <span class="citation" data-cites="rinne2014">(<a href="#/references" role="doc-biblioref" onclick="">Rinne 2014</a>)</span>:</p>
+<p><span class="math display">\[
+h(t) = \lim_{dt \to 0} \frac{P(t \le T &lt; t + dt \mid T \ge t)}{dt} = \frac{f_T(t)}{S_T(t)},
+\]</span></p>
+<p>where <span class="math inline">\(f_T(t)\)</span> is the probability density function of <span class="math inline">\(T\)</span>. <strong>Instantaneous Failure Rate</strong></p>
+</div>
+<div class="fragment fade-up">
+<div class="box">
+<p><span class="box-title">Homework (suggested)</span></p>
+<p>Show that <span class="math inline">\(h(t) = f_T(t)/S_T(t)\)</span>. Then show that <span class="math inline">\(S_T(t) = \exp\{-H(t)\}\)</span>, where <span class="math inline">\(H(t) = \int_0^t h(u)\,du\)</span> is the <strong>cumulative hazard</strong>.</p>
+</div>
+</div>
+<aside class="notes">
+<p>~3 min. Intuition: h(t)dt is approximately the chance of failing in the next small interval, given that the item has lasted until t. Engineers may know it as the “failure rate”.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-shape-of-the-hazard-tells-a-story" class="slide level2">
+<h2>The shape of the hazard tells a story</h2>
+
+<img data-src="images/bathtub.svg" class="quarto-figure quarto-figure-center r-stretch" style="width:92.0%"><p>The classic <strong>bathtub curve</strong>: different mechanisms dominate at different stages of an asset’s life. Estimating the hazard shape from data helps decide <em>when</em> to inspect, maintain, or replace.</p>
+<aside class="notes">
+<p>~2 min. Many students will have seen this curve before. Emphasise that a survival curve alone would hide these three regimes.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-typical-data-set" class="slide level2">
+<h2>The typical data set</h2>
+<div class="columns">
+<div class="column" style="width:48%;">
+<ul>
+<li><strong>Times to event</strong> <span class="math inline">\(t_1, \dots, t_n\)</span> (possibly right-censored).</li>
+<li><strong>Status indicators</strong> <span class="math inline">\(\delta_1, \dots, \delta_n\)</span>:
+<ul>
+<li><span class="fail"><span class="math inline">\(\delta_i = 1\)</span></span>: failure observed</li>
+<li><span class="cens"><span class="math inline">\(\delta_i = 0\)</span></span>: right-censored, still in service</li>
+</ul></li>
+</ul>
+<p>Censoring can be due to the <strong>end of the study period</strong>, an asset <strong>removed for other reasons</strong> (e.g.&nbsp;road realignment), or <strong>lost records</strong>.</p>
+</div><div class="column" style="width:52%;">
+<p><img data-src="images/censor.jpg" style="width:76.0%"></p>
+<div class="fragment fade-up">
+<div class="box warn">
+<p><span class="box-title">Don’t throw censored items away</span></p>
+<p>Dropping them, or treating them as failures, biases lifetime estimates. A censored item still tells us it <strong>survived at least</strong> until <span class="math inline">\(t_i\)</span>.</p>
+</div>
+</div>
+</div></div>
+<aside class="notes">
+<p>~3 min.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="adding-covariates" class="slide level2">
+<h2>Adding covariates</h2>
+<p>We often know more about each item: covariates <span class="math inline">\(\mathbf{x}_i = (x_{i1}, \dots, x_{ip})^\top\)</span>.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Covariate</th>
+<th style="text-align: left;">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Material</td>
+<td style="text-align: left;">cast iron, ductile iron, PVC</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Geometry</td>
+<td style="text-align: left;">pipe diameter, slab thickness</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Environment</td>
+<td style="text-align: left;">soil corrosivity, freeze–thaw cycles</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Loading</td>
+<td style="text-align: left;">traffic volume, operating pressure</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p><strong>The key question:</strong> how should covariates change the hazard function?</p>
+</div>
+<aside class="notes">
+<p>~1 min. Transition to the three classical answers.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="three-classical-answers" class="slide level2">
+<h2>Three classical answers</h2>
+<div class="columns">
+<div class="column model-col" style="width:31%;">
+<h3 id="ph">PH</h3>
+<div class="fragment fade-up">
+<p>Covariates <strong>multiply the hazard</strong>.</p>
+<div class="eq">
+<p><span class="math display">\[h(t \mid \mathbf{x}) = h_0(t)\, e^{\mathbf{x}^\top\beta}\]</span></p>
+</div>
+<p>The hazard ratio <span class="math inline">\(e^{\beta}\)</span> is the same at every time.</p>
+</div>
+</div><div class="column" style="width:3%;">
+
+</div><div class="column model-col" style="width:31%;">
+<h3 id="aft">AFT</h3>
+<div class="fragment fade-up">
+<p>Covariates <strong>speed up or slow down time</strong> for the whole lifetime.</p>
+<div class="eq">
+<p><span class="math display">\[
+\begin{aligned}
+S(t \mid \mathbf{x}) &amp;= S_0\!\left(t\, e^{\mathbf{x}^\top\beta}\right) \\
+h(t \mid \mathbf{x}) &amp;= h_0\!\left(t\, e^{\mathbf{x}^\top\beta}\right) e^{\mathbf{x}^\top\beta}
+\end{aligned}
+\]</span></p>
+</div>
+<p>The idea behind <strong>accelerated life testing</strong>: harsh conditions make a component “age” faster.</p>
+</div>
+</div><div class="column" style="width:3%;">
+
+</div><div class="column model-col" style="width:31%;">
+<h3 id="ah">AH</h3>
+<div class="fragment fade-up">
+<p>Covariates <strong>rescale time inside the hazard</strong> only.</p>
+<div class="eq">
+<p><span class="math display">\[h(t \mid \mathbf{x}) = h_0\!\left(t\, e^{\mathbf{x}^\top\alpha}\right)\]</span></p>
+</div>
+<p>Shifts <em>when</em> the risk peaks, without changing its height.</p>
+</div>
+</div></div>
+<p><br></p>
+<p>Here <span class="math inline">\(h_0\)</span> and <span class="math inline">\(S_0\)</span> are the <strong>baseline</strong> hazard and survival functions (all covariates equal to zero).</p>
+<aside class="notes">
+<p>~3 min. The AFT connection is the one engineers find most natural.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-general-hazard-gh-structure" class="slide level2">
+<h2>The general hazard (GH) structure</h2>
+<p><span class="citation" data-cites="etezadi1987">Etezadi-Amoli and Ciampi (<a href="#/references" role="doc-biblioref" onclick="">1987</a>)</span> and <span class="citation" data-cites="chen2001">Chen and Jewell (<a href="#/references" role="doc-biblioref" onclick="">2001</a>)</span> proposed a natural structure that contains all three:</p>
+<p><span class="math display">\[
+\begin{aligned}
+h(t \mid \mathbf{x}) &amp;= h_0\!\left(t\, e^{\tilde{\mathbf{x}}^\top\alpha}\right) e^{\mathbf{x}^\top\beta}, \\
+H(t \mid \mathbf{x}) &amp;= H_0\!\left(t\, e^{\tilde{\mathbf{x}}^\top\alpha}\right) e^{\mathbf{x}^\top\beta - \tilde{\mathbf{x}}^\top\alpha},
+\end{aligned}
+\qquad \tilde{\mathbf{x}} \subseteq \mathbf{x}.
+\]</span></p>
+<div class="columns">
+<div class="column fragment fade-up" style="width:55%;">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Constraint</th>
+<th style="text-align: left;">Model</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\alpha = 0\)</span></td>
+<td style="text-align: left;">PH</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\beta = 0\)</span></td>
+<td style="text-align: left;">AH</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\alpha = \beta\)</span> (with <span class="math inline">\(\tilde{\mathbf{x}} = \mathbf{x}\)</span>)</td>
+<td style="text-align: left;">AFT</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column small fragment fade-up" style="width:45%;">
+<ul>
+<li><span class="math inline">\(\tilde{\mathbf{x}}\)</span>: <strong>time-level</strong> effects, through <span class="math inline">\(\alpha\)</span>.</li>
+<li><span class="math inline">\(\mathbf{x}\)</span>: <strong>hazard-level</strong> effects, through <span class="math inline">\(\beta\)</span>.</li>
+<li>Identifiable unless the baseline is <strong>Weibull</strong>, where PH, AFT and AH coincide <span class="citation" data-cites="chen2001">(<a href="#/references" role="doc-biblioref" onclick="">Chen and Jewell 2001</a>)</span>.</li>
+<li>Widely used in applications <span class="citation" data-cites="rubio2019">(<a href="#/references" role="doc-biblioref" onclick="">Rubio et al. 2019</a>)</span>.</li>
+</ul>
+</div></div>
+<aside class="notes">
+<p>~3 min. The next slides let you see what alpha and beta do.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="cell hidden">
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="274" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 273;"><span id="cb1-274"><a href=""></a><span class="co">// Shared helpers for the interactive slides.</span></span>
+<span id="cb1-275"><a href=""></a><span class="co">// Baseline: log-logistic with scale lam and shape k (unimodal hazard, not Weibull).</span></span>
+<span id="cb1-276"><a href=""></a>hz <span class="op">=</span> {</span>
+<span id="cb1-277"><a href=""></a>  <span class="kw">const</span> lam <span class="op">=</span> <span class="dv">2</span><span class="op">,</span> k <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb1-278"><a href=""></a>  <span class="kw">const</span> h0 <span class="op">=</span> t <span class="kw">=&gt;</span> (k <span class="op">/</span> lam) <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">pow</span>(t <span class="op">/</span> lam<span class="op">,</span> k <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">pow</span>(t <span class="op">/</span> lam<span class="op">,</span> k))<span class="op">;</span></span>
+<span id="cb1-279"><a href=""></a>  <span class="kw">const</span> H0 <span class="op">=</span> t <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">log</span>(<span class="dv">1</span> <span class="op">+</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">pow</span>(t <span class="op">/</span> lam<span class="op">,</span> k))<span class="op">;</span></span>
+<span id="cb1-280"><a href=""></a>  <span class="kw">const</span> grid <span class="op">=</span> d3<span class="op">.</span><span class="fu">range</span>(<span class="fl">0.01</span><span class="op">,</span> <span class="fl">8.001</span><span class="op">,</span> <span class="fl">0.04</span>)<span class="op">;</span></span>
+<span id="cb1-281"><a href=""></a>  <span class="kw">const</span> curves <span class="op">=</span> (a<span class="op">,</span> b) <span class="kw">=&gt;</span> grid<span class="op">.</span><span class="fu">map</span>(t <span class="kw">=&gt;</span> ({</span>
+<span id="cb1-282"><a href=""></a>    t<span class="op">,</span></span>
+<span id="cb1-283"><a href=""></a>    <span class="dt">h</span><span class="op">:</span> <span class="fu">h0</span>(t <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(a)) <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(b)<span class="op">,</span></span>
+<span id="cb1-284"><a href=""></a>    <span class="dt">S</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(<span class="op">-</span><span class="fu">H0</span>(t <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(a)) <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(b <span class="op">-</span> a))</span>
+<span id="cb1-285"><a href=""></a>  }))<span class="op">;</span></span>
+<span id="cb1-286"><a href=""></a>  <span class="cf">return</span> {grid<span class="op">,</span> curves}<span class="op">;</span></span>
+<span id="cb1-287"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display hidden">
+<div id="ojs-cell-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell hidden">
+<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="293" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 292;"><span id="cb2-293"><a href=""></a><span class="kw">function</span> <span class="fu">hazPanels</span>(a<span class="op">,</span> b<span class="op">,</span> hmax) {</span>
+<span id="cb2-294"><a href=""></a>  <span class="kw">const</span> base <span class="op">=</span> hz<span class="op">.</span><span class="fu">curves</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb2-295"><a href=""></a>  <span class="kw">const</span> cov  <span class="op">=</span> hz<span class="op">.</span><span class="fu">curves</span>(a<span class="op">,</span> b)<span class="op">;</span></span>
+<span id="cb2-296"><a href=""></a>  <span class="kw">const</span> common <span class="op">=</span> {</span>
+<span id="cb2-297"><a href=""></a>    <span class="dt">width</span><span class="op">:</span> <span class="dv">540</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">340</span><span class="op">,</span> <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">58</span><span class="op">,</span> <span class="dt">marginTop</span><span class="op">:</span> <span class="dv">34</span><span class="op">,</span> <span class="dt">marginBottom</span><span class="op">:</span> <span class="dv">48</span><span class="op">,</span></span>
+<span id="cb2-298"><a href=""></a>    <span class="dt">style</span><span class="op">:</span> {<span class="dt">fontFamily</span><span class="op">:</span> <span class="st">"IBM Plex Sans, sans-serif"</span><span class="op">,</span> <span class="dt">fontSize</span><span class="op">:</span> <span class="st">"17px"</span><span class="op">,</span></span>
+<span id="cb2-299"><a href=""></a>            <span class="dt">background</span><span class="op">:</span> <span class="st">"transparent"</span><span class="op">,</span> <span class="dt">color</span><span class="op">:</span> <span class="st">"#1D2B45"</span>}<span class="op">,</span></span>
+<span id="cb2-300"><a href=""></a>    <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Time in service, t"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">8</span>]<span class="op">,</span> <span class="dt">labelAnchor</span><span class="op">:</span> <span class="st">"center"</span>}</span>
+<span id="cb2-301"><a href=""></a>  }<span class="op">;</span></span>
+<span id="cb2-302"><a href=""></a>  <span class="kw">const</span> refLine <span class="op">=</span> y <span class="kw">=&gt;</span> Plot<span class="op">.</span><span class="fu">line</span>(base<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"t"</span><span class="op">,</span> y<span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#8A93A3"</span><span class="op">,</span></span>
+<span id="cb2-303"><a href=""></a>                                         <span class="dt">strokeWidth</span><span class="op">:</span> <span class="fl">2.5</span><span class="op">,</span> <span class="dt">strokeDasharray</span><span class="op">:</span> <span class="st">"7,6"</span>})<span class="op">;</span></span>
+<span id="cb2-304"><a href=""></a>  <span class="kw">const</span> covLine <span class="op">=</span> y <span class="kw">=&gt;</span> Plot<span class="op">.</span><span class="fu">line</span>(cov<span class="op">,</span>  {<span class="dt">x</span><span class="op">:</span> <span class="st">"t"</span><span class="op">,</span> y<span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#E3661B"</span><span class="op">,</span></span>
+<span id="cb2-305"><a href=""></a>                                         <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">4</span><span class="op">,</span> <span class="dt">clip</span><span class="op">:</span> <span class="kw">true</span>})<span class="op">;</span></span>
+<span id="cb2-306"><a href=""></a>  <span class="kw">const</span> pH <span class="op">=</span> Plot<span class="op">.</span><span class="fu">plot</span>({<span class="op">...</span>common<span class="op">,</span></span>
+<span id="cb2-307"><a href=""></a>    <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Hazard h(t)"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> hmax]<span class="op">,</span> <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb2-308"><a href=""></a>    <span class="dt">marks</span><span class="op">:</span> [<span class="fu">refLine</span>(<span class="st">"h"</span>)<span class="op">,</span> <span class="fu">covLine</span>(<span class="st">"h"</span>)<span class="op">,</span> Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])]})<span class="op">;</span></span>
+<span id="cb2-309"><a href=""></a>  <span class="kw">const</span> pS <span class="op">=</span> Plot<span class="op">.</span><span class="fu">plot</span>({<span class="op">...</span>common<span class="op">,</span></span>
+<span id="cb2-310"><a href=""></a>    <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Survival S(t)"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb2-311"><a href=""></a>    <span class="dt">marks</span><span class="op">:</span> [<span class="fu">refLine</span>(<span class="st">"S"</span>)<span class="op">,</span> <span class="fu">covLine</span>(<span class="st">"S"</span>)<span class="op">,</span> Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])]})<span class="op">;</span></span>
+<span id="cb2-312"><a href=""></a>  <span class="cf">return</span> <span class="fu">html</span><span class="vs">`&lt;div class="hz-panels"&gt;</span><span class="sc">${</span>pH<span class="sc">}${</span>pS<span class="sc">}</span><span class="vs">&lt;/div&gt;`</span><span class="op">;</span></span>
+<span id="cb2-313"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display hidden">
+<div id="ojs-cell-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell hidden">
+<div class="sourceCode cell-code hidden" id="cb3" data-startfrom="319" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 318;"><span id="cb3-319"><a href=""></a>legend <span class="op">=</span> () <span class="kw">=&gt;</span> <span class="fu">html</span><span class="vs">`&lt;div class="legend"&gt;</span></span>
+<span id="cb3-320"><a href=""></a><span class="vs">  &lt;span&gt;&lt;span class="swatch ref"&gt;&lt;/span&gt;reference item (x = 0)&lt;/span&gt;</span></span>
+<span id="cb3-321"><a href=""></a><span class="vs">  &lt;span&gt;&lt;span class="swatch cov"&gt;&lt;/span&gt;item with x = 1 (e.g. corrosive soil)&lt;/span&gt;</span></span>
+<span id="cb3-322"><a href=""></a><span class="vs">&lt;/div&gt;`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display hidden">
+<div id="ojs-cell-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</section>
+<section id="time-level-effects-what-alpha-does" class="slide level2">
+<h2>Time-level effects: what <span class="math inline">\(\alpha\)</span> does</h2>
+<p>Set <span class="math inline">\(\beta = 0\)</span> (the AH model) and move <span class="math inline">\(\alpha\)</span>. The covariate changes <strong>the clock inside the hazard</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="331" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 330;"><span id="cb4-331"><a href=""></a>viewof a1 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.6</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.05</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"α"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="336" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 335;"><span id="cb5-336"><a href=""></a><span class="fu">hazPanels</span>(a1<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="fl">1.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-5" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb6" data-startfrom="341" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 340;"><span id="cb6-341"><a href=""></a><span class="fu">html</span><span class="vs">`&lt;div class="hz-readout"&gt;e&lt;sup&gt;α&lt;/sup&gt; = &lt;strong&gt;</span><span class="sc">${</span><span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(a1)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">&lt;/strong&gt;: the peak risk arrives </span><span class="sc">${</span>a1 <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">"earlier"</span> <span class="op">:</span> a1 <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">"later"</span> <span class="op">:</span> <span class="st">"at the same time"</span><span class="sc">}</span><span class="vs">, with the same height.&lt;/div&gt;`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-6" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb7" data-startfrom="346" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 345;"><span id="cb7-346"><a href=""></a><span class="fu">legend</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-7" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>~1.5 min. Replaces the original animation. Try alpha = 0.6 then -0.6.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="hazard-level-effects-what-beta-does" class="slide level2">
+<h2>Hazard-level effects: what <span class="math inline">\(\beta\)</span> does</h2>
+<p>Set <span class="math inline">\(\alpha = 0\)</span> (the PH model) and move <span class="math inline">\(\beta\)</span>. The covariate <strong>scales the hazard up or down</strong> at every time.</p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb8" data-startfrom="359" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 358;"><span id="cb8-359"><a href=""></a>viewof b2 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="fl">1.2</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.7</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.05</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"β"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-8" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb9" data-startfrom="364" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 363;"><span id="cb9-364"><a href=""></a><span class="fu">hazPanels</span>(<span class="dv">0</span><span class="op">,</span> b2<span class="op">,</span> <span class="fl">2.8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-9" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb10" data-startfrom="369" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 368;"><span id="cb10-369"><a href=""></a><span class="fu">html</span><span class="vs">`&lt;div class="hz-readout"&gt;Hazard ratio e&lt;sup&gt;β&lt;/sup&gt; = &lt;strong&gt;</span><span class="sc">${</span><span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(b2)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">&lt;/strong&gt; at every time point; the peak stays at the same time.&lt;/div&gt;`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-10" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb11" data-startfrom="374" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 373;"><span id="cb11-374"><a href=""></a><span class="fu">legend</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-11" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>~1.5 min. Replaces the original animation.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="explore-the-whole-gh-family" class="slide level2">
+<h2>Explore: the whole GH family</h2>
+<div class="hz-controls">
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb12" data-startfrom="386" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 385;"><span id="cb12-386"><a href=""></a>viewof a3 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.5</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.05</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"α"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-12" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb13" data-startfrom="391" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 390;"><span id="cb13-391"><a href=""></a>viewof b3 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="fl">1.2</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.5</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.05</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"β"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-13" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="cell hidden">
+<div class="sourceCode cell-code hidden" id="cb14" data-startfrom="398" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 397;"><span id="cb14-398"><a href=""></a>modelName <span class="op">=</span> {</span>
+<span id="cb14-399"><a href=""></a>  <span class="kw">const</span> eq <span class="op">=</span> (u<span class="op">,</span> v) <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(u <span class="op">-</span> v) <span class="op">&lt;</span> <span class="fl">1e-9</span><span class="op">;</span></span>
+<span id="cb14-400"><a href=""></a>  <span class="cf">if</span> (<span class="fu">eq</span>(a3<span class="op">,</span> <span class="dv">0</span>) <span class="op">&amp;&amp;</span> <span class="fu">eq</span>(b3<span class="op">,</span> <span class="dv">0</span>)) <span class="cf">return</span> [<span class="st">"Baseline"</span><span class="op">,</span> <span class="st">"no covariate effect"</span>]<span class="op">;</span></span>
+<span id="cb14-401"><a href=""></a>  <span class="cf">if</span> (<span class="fu">eq</span>(a3<span class="op">,</span> <span class="dv">0</span>)) <span class="cf">return</span> [<span class="st">"PH"</span><span class="op">,</span> <span class="st">"α = 0"</span>]<span class="op">;</span></span>
+<span id="cb14-402"><a href=""></a>  <span class="cf">if</span> (<span class="fu">eq</span>(b3<span class="op">,</span> <span class="dv">0</span>)) <span class="cf">return</span> [<span class="st">"AH"</span><span class="op">,</span> <span class="st">"β = 0"</span>]<span class="op">;</span></span>
+<span id="cb14-403"><a href=""></a>  <span class="cf">if</span> (<span class="fu">eq</span>(a3<span class="op">,</span> b3)) <span class="cf">return</span> [<span class="st">"AFT"</span><span class="op">,</span> <span class="st">"α = β"</span>]<span class="op">;</span></span>
+<span id="cb14-404"><a href=""></a>  <span class="cf">return</span> [<span class="st">"GH"</span><span class="op">,</span> <span class="st">"general case"</span>]<span class="op">;</span></span>
+<span id="cb14-405"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display hidden">
+<div id="ojs-cell-14" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb15" data-startfrom="410" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 409;"><span id="cb15-410"><a href=""></a><span class="fu">html</span><span class="vs">`&lt;div class="hz-readout"&gt;&lt;span class="model-tag"&gt;</span><span class="sc">${</span>modelName[<span class="dv">0</span>]<span class="sc">}</span><span class="vs">&lt;/span&gt;</span><span class="sc">${</span>modelName[<span class="dv">1</span>]<span class="sc">}</span><span class="vs">&lt;/div&gt;`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-15" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb16" data-startfrom="415" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 414;"><span id="cb16-415"><a href=""></a><span class="fu">hazPanels</span>(a3<span class="op">,</span> b3<span class="op">,</span> <span class="fl">2.8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-16" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb17" data-startfrom="420" data-source-offset="0"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 419;"><span id="cb17-420"><a href=""></a><span class="fu">legend</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-17" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>~1 min, optional. Set alpha = beta to show AFT: the survival curve is stretched horizontally.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="fitting-parametric-gh-models" class="slide level2">
+<h2>Fitting parametric GH models</h2>
+<div>
+<ol type="1">
+<li class="fragment"><strong>Choose a parametric baseline</strong> <span class="math inline">\(h_0(\cdot\,; \theta)\)</span>, e.g.&nbsp;lognormal, log-logistic, gamma, generalised gamma, power generalised Weibull (PGW).</li>
+<li class="fragment"><strong>Write the likelihood.</strong> Failures and censored items both contribute: <span class="math display">\[
+L(\theta, \alpha, \beta) = \prod_{i=1}^n h(t_i \mid \mathbf{x}_i)^{\delta_i}\, S(t_i \mid \mathbf{x}_i).
+\]</span></li>
+<li class="fragment"><strong>Maximise it</strong> to obtain maximum likelihood estimates.</li>
+<li class="fragment"><strong>Compare candidate models</strong> (baseline × PH / AFT / AH / GH) using AIC or BIC.</li>
+</ol>
+</div>
+<div class="fragment">
+<p>Software: the <strong>HazReg</strong> packages for <a href="TODO-LINK-HAZREG-R">R</a> and <a href="TODO-LINK-HAZREG-JULIA">Julia</a>.</p>
+</div>
+<aside class="notes">
+<p>~2 min. Point out that censored items enter through S(t_i): this is how censoring is “used, not discarded”.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="choosing-a-baseline-hazard" class="slide level2">
+<h2>Choosing a baseline hazard</h2>
+<p>A brief catalogue: <a href="https://en.wikipedia.org/wiki/Gamma_distribution">Gamma</a>, <a href="https://en.wikipedia.org/wiki/Weibull_distribution">Weibull</a>, <a href="https://en.wikipedia.org/wiki/Log-normal_distribution">Lognormal</a>, <a href="https://en.wikipedia.org/wiki/Log-logistic_distribution">Log-logistic</a>, <a href="https://en.wikipedia.org/wiki/Generalized_gamma_distribution">Generalised gamma</a>, <a href="https://rpubs.com/FJRubio/PGW">PGW</a>, <a href="https://rpubs.com/FJRubio/EWD">EW</a>, among many others.</p>
+
+<img data-src="images/hazard-shapes.svg" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><aside class="notes">
+<p>~1.5 min.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="baseline-choice-is-an-assumption" class="slide level2">
+<h2>Baseline choice is an assumption</h2>
+<div class="box warn">
+<p><span class="box-title">Warning</span></p>
+<p>By picking a distribution from the catalogue, we restrict the <strong>hazard shapes</strong> the model can represent. A Weibull model can never produce a bathtub curve, however much data we collect.</p>
+</div>
+<div class="fragment fade-up">
+<table class="caption-top">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Distribution</th>
+<th style="text-align: left;">Hazard shapes it can capture</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Weibull</td>
+<td style="text-align: left;">increasing, decreasing, constant</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lognormal, log-logistic</td>
+<td style="text-align: left;">unimodal (up then down)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Generalised gamma, PGW, EW</td>
+<td style="text-align: left;">increasing, decreasing, bathtub, unimodal</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment fade-up">
+<p>Fit several candidates and select with <strong>AIC</strong> <span class="math inline">\(= 2k - 2\log \hat{L}\)</span> or <strong>BIC</strong> <span class="math inline">\(= k \log n - 2 \log \hat{L}\)</span> (smaller is better; <span class="math inline">\(k\)</span> = number of parameters). Then check the selected model makes engineering sense.</p>
+</div>
+<aside class="notes">
+<p>~1 min.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="real-data-example" class="slide level2">
+<h2>Real data example</h2>
+<ul>
+<li>The <strong>LeukSurv</strong> data set from the R package <em>spBayesSurv</em>: survival of acute myeloid leukaemia in 1,043 patients.</li>
+<li>We fit <strong>GH, PH, AFT and AH</strong> models with different baselines and select the best using <strong>AIC and BIC</strong>.</li>
+<li>We summarise the selected model with the tools in the <strong>HazReg</strong> R package.</li>
+</ul>
+<p><a href="https://fjrubio-hazreg.share.connect.posit.cloud/" class="app-link" target="_blank">Open the worked example</a></p>
+<div class="box">
+<p><span class="box-title">Think about it</span></p>
+<p>The workflow is identical for engineering data. For a water-main failure record, which covariates might act at the <strong>time level</strong> (<span class="math inline">\(\tilde{\mathbf{x}}\)</span>) and which at the <strong>hazard level</strong> (<span class="math inline">\(\mathbf{x}\)</span>)?</p>
+</div>
+<aside class="notes">
+<p>~3 min, live demo in the browser.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="key-takeaways" class="slide level2">
+<h2>Key takeaways</h2>
+<div>
+<ul>
+<li class="fragment">Time-to-event data appear throughout engineering; <strong>censoring</strong> is the norm, not the exception.</li>
+<li class="fragment">The <strong>hazard function</strong> describes how the risk of failure evolves; its shape carries physical meaning.</li>
+<li class="fragment">Covariates can act on the <strong>hazard level</strong> (PH), the <strong>time scale</strong> (AFT, AH), or both (<strong>GH</strong>).</li>
+<li class="fragment">Parametric baselines make assumptions about hazard shapes: <strong>compare models formally</strong>.</li>
+</ul>
+</div>
+</section>
+<section id="references" class="slide level2 refs smaller scrollable">
+<h2>References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-chen2001" class="csl-entry" role="listitem">
+Chen, Y. Q., and N. P. Jewell. 2001. <span>“On a General Class of Semiparametric Hazards Regression Models.”</span> <em>Biometrika</em> 88 (3): 687–702.
+</div>
+<div id="ref-etezadi1987" class="csl-entry" role="listitem">
+Etezadi-Amoli, J., and A. Ciampi. 1987. <span>“Extended Hazard Regression for Censored Survival Data with Covariates: A Spline Approximation for the Baseline Hazard Function.”</span> <em>Biometrics</em> 43: 181–92.
+</div>
+<div id="ref-meeker1998" class="csl-entry" role="listitem">
+Meeker, W. Q., and L. A. Escobar. 1998. <em>Statistical Methods for Reliability Data</em>. New York: Wiley.
+</div>
+<div id="ref-rinne2014" class="csl-entry" role="listitem">
+Rinne, H. 2014. <em>The Hazard Rate: Theory and Inference (with Supplementary <span>MATLAB</span>-Programs)</em>. Giessen, Germany: Justus-Liebig-University.
+</div>
+<div id="ref-rubio2019" class="csl-entry" role="listitem">
+Rubio, F. J., L. Remontet, N. P. Jewell, and A. Belot. 2019. <span>“On a General Structure for Hazard-Based Regression Models: An Application to Population-Based Cancer Research.”</span> <em>Statistical Methods in Medical Research</em> 28: 2404–17.
+</div>
+</div>
+<div class="quarto-auto-generated-content">
+<div class="footer footer-default">
+<p>Hazard-based regression models</p>
+</div>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="hazard-regression_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="hazard-regression_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="hazard-regression_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="hazard-regression_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="hazard-regression_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="hazard-regression_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="hazard-regression_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="hazard-regression_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="hazard-regression_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="hazard-regression_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1280,
+
+        height: 720,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 8.0e-2,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script type="ojs-module-contents">
+    eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Ii8vIFNoYXJlZCBoZWxwZXJzIGZvciB0aGUgaW50ZXJhY3RpdmUgc2xpZGVzLlxuLy8gQmFzZWxpbmU6IGxvZy1sb2dpc3RpYyB3aXRoIHNjYWxlIGxhbSBhbmQgc2hhcGUgayAodW5pbW9kYWwgaGF6YXJkLCBub3QgV2VpYnVsbCkuXG5oeiA9IHtcbiAgY29uc3QgbGFtID0gMiwgayA9IDM7XG4gIGNvbnN0IGgwID0gdCA9PiAoayAvIGxhbSkgKiBNYXRoLnBvdyh0IC8gbGFtLCBrIC0gMSkgLyAoMSArIE1hdGgucG93KHQgLyBsYW0sIGspKTtcbiAgY29uc3QgSDAgPSB0ID0+IE1hdGgubG9nKDEgKyBNYXRoLnBvdyh0IC8gbGFtLCBrKSk7XG4gIGNvbnN0IGdyaWQgPSBkMy5yYW5nZSgwLjAxLCA4LjAwMSwgMC4wNCk7XG4gIGNvbnN0IGN1cnZlcyA9IChhLCBiKSA9PiBncmlkLm1hcCh0ID0+ICh7XG4gICAgdCxcbiAgICBoOiBoMCh0ICogTWF0aC5leHAoYSkpICogTWF0aC5leHAoYiksXG4gICAgUzogTWF0aC5leHAoLUgwKHQgKiBNYXRoLmV4cChhKSkgKiBNYXRoLmV4cChiIC0gYSkpXG4gIH0pKTtcbiAgcmV0dXJuIHtncmlkLCBjdXJ2ZXN9O1xufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0yIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiZnVuY3Rpb24gaGF6UGFuZWxzKGEsIGIsIGhtYXgpIHtcbiAgY29uc3QgYmFzZSA9IGh6LmN1cnZlcygwLCAwKTtcbiAgY29uc3QgY292ICA9IGh6LmN1cnZlcyhhLCBiKTtcbiAgY29uc3QgY29tbW9uID0ge1xuICAgIHdpZHRoOiA1NDAsIGhlaWdodDogMzQwLCBtYXJnaW5MZWZ0OiA1OCwgbWFyZ2luVG9wOiAzNCwgbWFyZ2luQm90dG9tOiA0OCxcbiAgICBzdHlsZToge2ZvbnRGYW1pbHk6IFwiSUJNIFBsZXggU2Fucywgc2Fucy1zZXJpZlwiLCBmb250U2l6ZTogXCIxN3B4XCIsXG4gICAgICAgICAgICBiYWNrZ3JvdW5kOiBcInRyYW5zcGFyZW50XCIsIGNvbG9yOiBcIiMxRDJCNDVcIn0sXG4gICAgeDoge2xhYmVsOiBcIlRpbWUgaW4gc2VydmljZSwgdFwiLCBkb21haW46IFswLCA4XSwgbGFiZWxBbmNob3I6IFwiY2VudGVyXCJ9XG4gIH07XG4gIGNvbnN0IHJlZkxpbmUgPSB5ID0+IFBsb3QubGluZShiYXNlLCB7eDogXCJ0XCIsIHksIHN0cm9rZTogXCIjOEE5M0EzXCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cm9rZVdpZHRoOiAyLjUsIHN0cm9rZURhc2hhcnJheTogXCI3LDZcIn0pO1xuICBjb25zdCBjb3ZMaW5lID0geSA9PiBQbG90LmxpbmUoY292LCAge3g6IFwidFwiLCB5LCBzdHJva2U6IFwiI0UzNjYxQlwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJva2VXaWR0aDogNCwgY2xpcDogdHJ1ZX0pO1xuICBjb25zdCBwSCA9IFBsb3QucGxvdCh7Li4uY29tbW9uLFxuICAgIHk6IHtsYWJlbDogXCJIYXphcmQgaCh0KVwiLCBkb21haW46IFswLCBobWF4XSwgZ3JpZDogdHJ1ZX0sXG4gICAgbWFya3M6IFtyZWZMaW5lKFwiaFwiKSwgY292TGluZShcImhcIiksIFBsb3QucnVsZVkoWzBdKV19KTtcbiAgY29uc3QgcFMgPSBQbG90LnBsb3Qoey4uLmNvbW1vbixcbiAgICB5OiB7bGFiZWw6IFwiU3Vydml2YWwgUyh0KVwiLCBkb21haW46IFswLCAxXSwgZ3JpZDogdHJ1ZX0sXG4gICAgbWFya3M6IFtyZWZMaW5lKFwiU1wiKSwgY292TGluZShcIlNcIiksIFBsb3QucnVsZVkoWzBdKV19KTtcbiAgcmV0dXJuIGh0bWxgPGRpdiBjbGFzcz1cImh6LXBhbmVsc1wiPiR7cEh9JHtwU308L2Rpdj5gO1xufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoibGVnZW5kID0gKCkgPT4gaHRtbGA8ZGl2IGNsYXNzPVwibGVnZW5kXCI+XG4gIDxzcGFuPjxzcGFuIGNsYXNzPVwic3dhdGNoIHJlZlwiPjwvc3Bhbj5yZWZlcmVuY2UgaXRlbSAoeCA9IDApPC9zcGFuPlxuICA8c3Bhbj48c3BhbiBjbGFzcz1cInN3YXRjaCBjb3ZcIj48L3NwYW4+aXRlbSB3aXRoIHggPSAxIChlLmcuIGNvcnJvc2l2ZSBzb2lsKTwvc3Bhbj5cbjwvZGl2PmBcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiBhMSA9IElucHV0cy5yYW5nZShbLTEsIDFdLCB7dmFsdWU6IDAuNiwgc3RlcDogMC4wNSwgbGFiZWw6IFwizrFcIn0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTUiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJoYXpQYW5lbHMoYTEsIDAsIDEuMilcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Imh0bWxgPGRpdiBjbGFzcz1cImh6LXJlYWRvdXRcIj5lPHN1cD7OsTwvc3VwPiA9IDxzdHJvbmc+JHtNYXRoLmV4cChhMSkudG9GaXhlZCgyKX08L3N0cm9uZz46IHRoZSBwZWFrIHJpc2sgYXJyaXZlcyAke2ExID4gMCA/IFwiZWFybGllclwiIDogYTEgPCAwID8gXCJsYXRlclwiIDogXCJhdCB0aGUgc2FtZSB0aW1lXCJ9LCB3aXRoIHRoZSBzYW1lIGhlaWdodC48L2Rpdj5gXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTciLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJsZWdlbmQoKVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC04IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIGIyID0gSW5wdXRzLnJhbmdlKFstMSwgMS4yXSwge3ZhbHVlOiAwLjcsIHN0ZXA6IDAuMDUsIGxhYmVsOiBcIs6yXCJ9KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC05IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiaGF6UGFuZWxzKDAsIGIyLCAyLjgpXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTEwIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiaHRtbGA8ZGl2IGNsYXNzPVwiaHotcmVhZG91dFwiPkhhemFyZCByYXRpbyBlPHN1cD7Osjwvc3VwPiA9IDxzdHJvbmc+JHtNYXRoLmV4cChiMikudG9GaXhlZCgyKX08L3N0cm9uZz4gYXQgZXZlcnkgdGltZSBwb2ludDsgdGhlIHBlYWsgc3RheXMgYXQgdGhlIHNhbWUgdGltZS48L2Rpdj5gXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTExIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoibGVnZW5kKClcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMTIiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ2aWV3b2YgYTMgPSBJbnB1dHMucmFuZ2UoWy0xLCAxXSwge3ZhbHVlOiAwLjUsIHN0ZXA6IDAuMDUsIGxhYmVsOiBcIs6xXCJ9KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xMyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiBiMyA9IElucHV0cy5yYW5nZShbLTEsIDEuMl0sIHt2YWx1ZTogMC41LCBzdGVwOiAwLjA1LCBsYWJlbDogXCLOslwifSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMTQiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJtb2RlbE5hbWUgPSB7XG4gIGNvbnN0IGVxID0gKHUsIHYpID0+IE1hdGguYWJzKHUgLSB2KSA8IDFlLTk7XG4gIGlmIChlcShhMywgMCkgJiYgZXEoYjMsIDApKSByZXR1cm4gW1wiQmFzZWxpbmVcIiwgXCJubyBjb3ZhcmlhdGUgZWZmZWN0XCJdO1xuICBpZiAoZXEoYTMsIDApKSByZXR1cm4gW1wiUEhcIiwgXCLOsSA9IDBcIl07XG4gIGlmIChlcShiMywgMCkpIHJldHVybiBbXCJBSFwiLCBcIs6yID0gMFwiXTtcbiAgaWYgKGVxKGEzLCBiMykpIHJldHVybiBbXCJBRlRcIiwgXCLOsSA9IM6yXCJdO1xuICByZXR1cm4gW1wiR0hcIiwgXCJnZW5lcmFsIGNhc2VcIl07XG59XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTE1IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiaHRtbGA8ZGl2IGNsYXNzPVwiaHotcmVhZG91dFwiPjxzcGFuIGNsYXNzPVwibW9kZWwtdGFnXCI+JHttb2RlbE5hbWVbMF19PC9zcGFuPiR7bW9kZWxOYW1lWzFdfTwvZGl2PmBcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMTYiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJoYXpQYW5lbHMoYTMsIGIzLCAyLjgpXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTE3IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoibGVnZW5kKClcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnYTEnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnYjInKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnYTMnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnYjMnKSJ9XX0=
+    </script>
+    <script type="module">
+    if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+    window._ojs.paths.runtimeToDoc = "../../..";
+    window._ojs.paths.runtimeToRoot = "../../..";
+    window._ojs.paths.docToRoot = "";
+    window._ojs.selfContained = false;
+    window._ojs.runtime.interpretFromScriptTags();
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

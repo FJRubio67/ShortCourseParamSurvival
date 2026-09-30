@@ -1,0 +1,224 @@
+/*-- scss:defaults --*/
+
+// Fonts: Barlow Semi Condensed (headings, road-signage feel) + IBM Plex Sans (body)
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+// Palette
+$ink:    #1D2B45;   // text, main curves
+$orange: #E3661B;   // failures / covariate effect
+$teal:   #23767E;   // censoring / links / secondary
+$grey:   #8A93A3;   // reference curves, muted text
+$rule:   #D9DDE3;   // hairlines
+$paper:  #FBFBF9;   // background
+
+$body-bg: $paper;
+$body-color: $ink;
+$link-color: $teal;
+$selection-bg: lighten($orange, 35%);
+
+$font-family-sans-serif: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+$presentation-font-size-root: 32px;
+$presentation-line-height: 1.4;
+
+$presentation-heading-font: "Barlow Semi Condensed", "Arial Narrow", sans-serif;
+$presentation-heading-color: $ink;
+$presentation-heading-font-weight: 600;
+$presentation-heading-line-height: 1.1;
+$presentation-heading-letter-spacing: 0;
+$presentation-h2-font-size: 1.75em;
+$presentation-h3-font-size: 1.2em;
+
+$code-color: $ink;
+$code-block-bg: #F1F3F6;
+
+/*-- scss:rules --*/
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal h2 {
+  margin-bottom: 0.6em;
+}
+
+.reveal h3 {
+  color: $ink;
+  margin-bottom: 0.3em;
+}
+
+.reveal .muted { color: $grey; }
+.reveal .fail  { color: $orange; font-weight: 600; }
+.reveal .cens  { color: $teal;   font-weight: 600; }
+
+.reveal .small { font-size: 0.8em; }
+.reveal .smaller { font-size: 0.68em; }
+
+// ---------- Title slide ----------
+#title-slide {
+  text-align: left;
+  .title {
+    font-size: 2.7em;
+    font-weight: 700;
+    color: #FFFFFF;
+    max-width: 18ch;
+    line-height: 1.02;
+  }
+  .subtitle {
+    color: #C9D1DE;
+    font-family: $font-family-sans-serif;
+    font-weight: 400;
+    font-size: 1.05em;
+    margin-top: 0.4em;
+  }
+  .quarto-title-authors, .quarto-title-author-name, .quarto-title-affiliation {
+    color: #FFFFFF;
+    text-align: left;
+    justify-content: flex-start;
+  }
+  .quarto-title-affiliation { color: #C9D1DE; }
+}
+
+// ---------- Side boxes (homework, warnings, prompts) ----------
+.reveal .box {
+  border-left: 5px solid $teal;
+  background: rgba(35, 118, 126, 0.07);
+  padding: 0.45em 0.8em;
+  margin: 0.8em 0;
+  font-size: 0.85em;
+  p { margin: 0.2em 0; }
+  .box-title {
+    font-family: $presentation-heading-font;
+    font-weight: 600;
+    color: $teal;
+    font-size: 1.1em;
+  }
+}
+.reveal .box.warn {
+  border-left-color: $orange;
+  background: rgba(227, 102, 27, 0.07);
+  .box-title { color: $orange; }
+}
+
+// ---------- Three-model comparison ----------
+.reveal .model-col {
+  border-top: 3px solid $ink;
+  padding-top: 0.4em;
+  font-size: 0.8em;
+  h3 { font-size: 1.35em; margin: 0 0 0.2em 0; }
+  .eq { margin: 0.4em 0; }
+}
+
+// ---------- Tables ----------
+.reveal table {
+  font-size: 0.8em;
+  margin-left: 0;
+  border-collapse: collapse;
+  th {
+    font-family: $presentation-heading-font;
+    font-weight: 600;
+    border-bottom: 2px solid $ink;
+  }
+  td, th { padding: 0.3em 0.9em 0.3em 0; }
+  tr { border-bottom: 1px solid $rule; }
+}
+
+// ---------- Interactive hazard explorer ----------
+.reveal .hz-panels {
+  display: flex;
+  gap: 1.2em;
+  align-items: flex-start;
+}
+.reveal .hz-panels svg { overflow: visible; }
+
+.reveal .hz-controls {
+  display: flex;
+  gap: 2.5em;
+  align-items: center;
+  margin-bottom: 0.2em;
+}
+
+// Make Observable Inputs legible on a projector
+.reveal form[class^="oi-"] {
+  --length3: 380px;
+  font-family: $font-family-sans-serif;
+  font-size: 22px;
+  width: auto;
+  label { width: auto; margin-right: 0.6em; font-weight: 500; color: $ink; }
+  input[type="range"] { width: 300px; accent-color: $orange; }
+  input[type="number"] { width: 4.5em; font-size: 20px; }
+}
+
+.reveal .hz-readout {
+  font-size: 0.75em;
+  margin-top: 0.1em;
+  min-height: 1.6em;
+}
+.reveal .hz-readout strong { color: $orange; }
+
+.reveal .legend {
+  font-size: 0.65em;
+  color: $ink;
+  display: flex;
+  gap: 1.6em;
+  margin-top: 0.2em;
+}
+.reveal .legend .swatch {
+  display: inline-block;
+  width: 2.2em;
+  height: 0;
+  vertical-align: middle;
+  margin-right: 0.4em;
+}
+.reveal .legend .ref { border-top: 3px dashed $grey; }
+.reveal .legend .cov { border-top: 4px solid $orange; }
+
+.reveal .model-tag {
+  display: inline-block;
+  font-family: $presentation-heading-font;
+  font-weight: 700;
+  font-size: 1.2em;
+  color: #FFFFFF;
+  background: $ink;
+  padding: 0.05em 0.5em;
+  margin-right: 0.4em;
+}
+
+// ---------- Link to the live example ----------
+.reveal a.app-link {
+  display: inline-block;
+  margin-top: 0.6em;
+  padding: 0.35em 0.9em;
+  background: $teal;
+  color: #FFFFFF;
+  font-weight: 600;
+  text-decoration: none;
+}
+.reveal a.app-link:hover,
+.reveal a.app-link:focus-visible {
+  background: darken($teal, 8%);
+  outline: 3px solid $orange;
+  outline-offset: 3px;
+}
+
+// ---------- Placeholder links still to fill in ----------
+.reveal a[href^="TODO"] {
+  text-decoration: underline dotted $orange;
+}
+
+// ---------- Footer and slide number ----------
+.reveal .footer {
+  font-size: 0.45em;
+  color: $grey;
+}
+.reveal .slide-number {
+  color: $grey;
+  background: transparent;
+}
+
+// ---------- References ----------
+.reveal .refs p {
+  font-size: 0.62em;
+  margin: 0 0 0.7em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
