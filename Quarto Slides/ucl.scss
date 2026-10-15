@@ -1,0 +1,274 @@
+/*-- scss:defaults --*/
+
+// Atkinson Hyperlegible Next: designed for legibility at a distance,
+// which suits a lecture theatre. Falls back to system fonts offline.
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&display=swap');
+
+// Colours taken from the UCL logo
+$ucl-ink:    #341B51;  // logo background
+$ucl-violet: #993BFF;  // logo portico
+$ucl-deep:   #6A1FD1;  // darker violet for text-sized accents (AA contrast on white)
+$ucl-lilac:  #F5F0FC;  // panel tint
+$ucl-text:   #2B2833;
+$ucl-muted:  #6B6676;
+
+$body-bg: #FFFFFF;
+$body-color: $ucl-text;
+$link-color: $ucl-deep;
+$selection-bg: $ucl-lilac;
+$code-color: $ucl-deep;
+
+$font-family-sans-serif: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$presentation-font-size-root: 34px;
+$presentation-line-height: 1.4;
+
+$presentation-heading-font: $font-family-sans-serif;
+$presentation-heading-color: $ucl-ink;
+$presentation-heading-font-weight: 700;
+$presentation-heading-line-height: 1.15;
+$presentation-heading-letter-spacing: -0.01em;
+$presentation-heading-text-transform: none;
+$presentation-h1-font-size: 2.6em;
+$presentation-h2-font-size: 1.45em;
+$presentation-h3-font-size: 1.15em;
+
+$presentation-title-slide-text-align: left;
+
+// Definitions use the violet; theorems, key models and warnings use the ink
+$callout-color-note: $ucl-violet;
+$callout-color-important: $ucl-ink;
+
+/*-- scss:rules --*/
+
+// ---- Regular slides ----------------------------------------------------
+.reveal .slides section.slide > h2 {
+  position: relative;
+  padding-bottom: 0.3em;
+  margin-bottom: 0.75em;
+}
+
+.reveal .slides section.slide > h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 2.4em;
+  height: 5px;
+  border-radius: 3px;
+  background: $ucl-violet;
+}
+
+.reveal ul li::marker,
+.reveal ol li::marker {
+  color: $ucl-violet;
+}
+
+.reveal ul ul li::marker {
+  color: $ucl-muted;
+}
+
+.reveal strong {
+  color: $ucl-ink;
+}
+
+.reveal .slide em {
+  color: inherit;
+}
+
+// Columns: vertically centre the figure next to the text
+.reveal .columns {
+  align-items: center;
+}
+
+.reveal .column img {
+  display: block;
+  margin: 0 auto;
+}
+
+// Small print (e.g. "(exercise)" over an equals sign, footnotes)
+.reveal .muted {
+  color: $ucl-muted;
+}
+
+// Link pills used for R examples and resources
+.reveal a.pill {
+  display: inline-block;
+  padding: 0.1em 0.6em;
+  border: 2px solid $ucl-violet;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+// Coloured text: population/other-causes (blue) and excess/cancer (red),
+// observed (red) and censored (blue) -- the same colours as in the maths
+.reveal span.pop, .reveal span.cens { color: #1F6FB5; }
+.reveal span.exc, .reveal span.obs { color: #C62828; }
+
+// Compact tables (model estimates, net survival)
+.reveal table.compact, .reveal .compact table {
+  font-size: 0.5em;
+}
+.reveal .compact table td, .reveal .compact table th {
+  padding: 0.12em 0.6em;
+}
+.reveal .compact table caption, .reveal .compact .table-caption {
+  font-size: 1em;
+}
+
+.reveal .compact table { width: 92%; }
+.reveal .compact-lg table {
+  font-size: 0.68em;
+  width: 92%;
+}
+.reveal .compact-lg table td, .reveal .compact-lg table th {
+  padding: 0.18em 0.6em;
+}
+.reveal .table-note {
+  font-size: 0.42em;
+  color: $ucl-muted;
+  margin-top: 0.3em;
+}
+
+// Interactive plots
+.reveal .ojs-inputs label { font-size: 0.7em; }
+
+// ---- Callouts ---------------------------------------------------------
+.reveal .slides section div.callout {
+  font-size: 0.8em;
+  border-radius: 6px;
+  margin: 0.4em 0 0.8em 0;
+  box-shadow: none;
+}
+
+.reveal div.callout.callout-style-default .callout-title {
+  font-weight: 700;
+  font-size: 0.85em;
+}
+
+.reveal div.callout .callout-title strong {
+  color: inherit;
+}
+
+.reveal div.callout-note {
+  border-left-color: $ucl-violet !important;
+}
+
+.reveal div.callout-important {
+  border-left-color: $ucl-ink !important;
+}
+
+.reveal div.callout-note.callout-style-default .callout-title {
+  background-color: $ucl-lilac;
+  color: $ucl-deep;
+}
+
+.reveal div.callout-important.callout-style-default .callout-title {
+  background-color: $ucl-ink;
+  color: #FFFFFF;
+}
+
+// ---- Footer, slide number, logo ---------------------------------------
+.reveal .footer {
+  color: $ucl-muted;
+}
+
+.reveal .slide-number {
+  color: $ucl-muted;
+  background: transparent;
+}
+
+.reveal .slide-logo {
+  max-height: 2.4em !important;
+  right: 0.9em !important;
+  bottom: 0.6em !important;
+  border-radius: 3px;
+}
+
+// ---- Dark slides (title and section dividers) -------------------------
+// The background colour matches the logo's, so the logo sits flush.
+.reveal .slides section.has-dark-background,
+.reveal .slides section.has-dark-background h1,
+.reveal .slides section.has-dark-background h2,
+.reveal .slides section.has-dark-background p,
+.reveal .slides section.has-dark-background a {
+  color: #FFFFFF;
+}
+
+.reveal .slides section.slide.level1 h1 {
+  text-align: left;
+  max-width: 85%;
+}
+
+.reveal .slides section.slide.level1 h1::before {
+  content: "";
+  display: block;
+  width: 1.1em;
+  height: 0.14em;
+  margin-bottom: 0.35em;
+  border-radius: 0.07em;
+  background: $ucl-violet;
+}
+
+#title-slide {
+  text-align: left;
+}
+
+#title-slide .title {
+  font-size: 2.1em;
+  max-width: 90%;
+}
+
+#title-slide .title::before {
+  content: "";
+  display: block;
+  width: 1.4em;
+  height: 0.16em;
+  margin-bottom: 0.45em;
+  border-radius: 0.08em;
+  background: $ucl-violet;
+}
+
+#title-slide .subtitle {
+  color: #D9C7FF;
+  font-size: 1.1em;
+  margin-top: 0.2em;
+}
+
+#title-slide .quarto-title-authors {
+  justify-content: flex-start;
+  margin-top: 1.6em;
+}
+
+#title-slide .quarto-title-author {
+  padding-left: 0;
+}
+
+#title-slide .quarto-title-author-name,
+#title-slide .quarto-title-author-name a {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+#title-slide .quarto-title-affiliation,
+#title-slide .institute {
+  color: #D9C7FF;
+}
+
+// Lighter footer and slide number on dark slides
+.reveal.has-dark-background .footer,
+.reveal.has-dark-background .slide-number {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+// References slide
+.reveal #refs {
+  font-size: 0.72em;
+}
+
+.reveal #refs .csl-entry {
+  font-size: 24px !important;
+  margin-bottom: 0.6em;
+  padding-left: 1.5em;
+  text-indent: -1.5em;
+}

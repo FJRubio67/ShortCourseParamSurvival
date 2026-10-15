@@ -1,0 +1,99 @@
+% UCL styling for the beamer (PDF) version of the slides
+\usepackage{tikz}
+
+\definecolor{uclink}{HTML}{341B51}
+\definecolor{uclviolet}{HTML}{993BFF}
+\definecolor{ucldeep}{HTML}{6A1FD1}
+\definecolor{ucllilac}{HTML}{F5F0FC}
+\definecolor{uclmuted}{HTML}{6B6676}
+% Observed (event) and right-censored times, as in the censoring figure
+\definecolor{obscol}{HTML}{C62828}
+\definecolor{censcol}{HTML}{1F6FB5}
+% Population (other-causes) and excess (cancer) hazards in Lecture II
+\colorlet{popcol}{censcol}
+\colorlet{exccol}{obscol}
+
+% ---- maths macros (the HTML version defines the same ones for MathJax) ----
+\providecommand{\symbf}{\boldsymbol}   % bold Greek works with and without unicode-math
+\newcommand{\btheta}{\symbf{\theta}}
+\newcommand{\bbeta}{\symbf{\beta}}
+\newcommand{\balpha}{\symbf{\alpha}}
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bz}{\mathbf{z}}
+\newcommand{\bpsi}{\symbf{\psi}}
+\newcommand{\pop}[1]{{\color{popcol}#1}}
+\newcommand{\exc}[1]{{\color{exccol}#1}}
+\newcommand{\obs}[1]{{\color{obscol}#1}}
+\newcommand{\cens}[1]{{\color{censcol}#1}}
+\newcommand{\exeq}{\overset{\text{\tiny(exercise)}}{=}}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{structure}{fg=uclink}
+\setbeamercolor{normal text}{fg=black!85}
+\setbeamercolor{frametitle}{fg=uclink}
+\setbeamerfont{frametitle}{series=\bfseries,size=\Large}
+\setbeamercolor{itemize item}{fg=uclviolet}
+\setbeamercolor{itemize subitem}{fg=uclmuted}
+\setbeamercolor{enumerate item}{fg=ucldeep}
+\setbeamercolor{alerted text}{fg=ucldeep}
+\setbeamertemplate{itemize item}{\raisebox{0.15ex}{\scriptsize$\blacktriangleright$}}
+\setbeamertemplate{itemize subitem}{\raisebox{0.2ex}{\tiny$\bullet$}}
+\hypersetup{colorlinks=true,linkcolor=ucldeep,urlcolor=ucldeep}
+
+% Frame title with a short violet rule underneath
+\setbeamertemplate{frametitle}{%
+  \vspace*{0.6em}%
+  {\usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\insertframetitle\par}%
+  \vspace{0.25em}%
+  {\color{uclviolet}\rule{2.2em}{2.5pt}}%
+  \vspace{0.2em}%
+}
+
+% Footer: lecture name (set \uclfooter in the .qmd), frame number and the UCL logo
+\setbeamertemplate{footline}{%
+  \hspace{1em}%
+  {\color{uclmuted}\tiny\ifdefined\uclfooter\uclfooter\else\insertshorttitle\fi}%
+  \hfill%
+  {\color{uclmuted}\tiny\insertframenumber\,/\,\inserttotalframenumber}%
+  \hspace{0.8em}%
+  \raisebox{-0.15cm}{\includegraphics[height=0.55cm]{figures/ucl_logo.pdf}}%
+  \hspace{0.5em}%
+  \vspace{0.45em}%
+}
+
+% Title page on a full-bleed UCL ink background
+\setbeamertemplate{title page}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[uclink] (current page.south west) rectangle (current page.north east);
+    \node[anchor=north east, inner sep=0pt] at ([xshift=-0.8cm,yshift=-0.7cm]current page.north east)
+      {\includegraphics[height=1.5cm]{figures/ucl_logo.pdf}};
+  \end{tikzpicture}%
+  \vfill
+  {\color{uclviolet}\rule{2.4em}{3pt}}\par\vspace{0.6em}
+  {\color{white}\usebeamerfont{title}\bfseries\inserttitle\par}
+  \vspace{0.3em}{\color{uclviolet!40!white}\usebeamerfont{subtitle}\insertsubtitle\par}
+  \vspace{1.6em}
+  {\color{white}\bfseries\insertauthor\par}
+  \vspace{0.2em}
+  {\color{uclviolet!40!white}\small\insertinstitute\par}
+  \vfill
+}
+
+% Section dividers on the same background
+\setbeamertemplate{section page}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[uclink] (current page.south west) rectangle (current page.north east);
+  \end{tikzpicture}%
+  \vfill
+  {\color{uclviolet}\rule{2.4em}{3pt}}\par\vspace{0.6em}
+  {\hypersetup{linkcolor=white}\color{white}\Huge\bfseries\insertsection\par}
+  \vfill
+}
+
+% Callout colours: violet and ink
+\AtBeginDocument{%
+  \colorlet{quarto-callout-note-color}{uclviolet}%
+  \colorlet{quarto-callout-note-color-frame}{uclviolet}%
+  \colorlet{quarto-callout-important-color}{uclink}%
+  \colorlet{quarto-callout-important-color-frame}{uclink}%
+}

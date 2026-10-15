@@ -1,0 +1,315 @@
+---
+title: "Survival Analysis: Parametric Models"
+subtitle: "Lecture I: Parametric survival analysis in the overall survival framework"
+author: "F. Javier Rubio"
+institute: "Department of Statistical Science, University College London"
+bibliography: references.bib
+nocite: |
+  @KP11, @klein:2016, @harrell:2015
+format:
+  revealjs:
+    theme: [default, ucl.scss]
+    logo: figures/ucl_logo.png
+    footer: "Survival Analysis: Parametric Models · Lecture I"
+    embed-resources: true
+    default-image-extension: svg
+    slide-number: c/t
+    show-slide-number: all
+    preview-links: auto
+    width: 1280
+    height: 720
+    incremental: true
+    transition: fade
+    transition-speed: fast
+    background-transition: none
+    title-slide-attributes:
+      data-background-color: "#341B51"
+  beamer:
+    aspectratio: 169
+    classoption: [handout]
+    incremental: false
+    default-image-extension: pdf
+    include-in-header: beamer-ucl.tex
+    colorlinks: true
+    linkcolor: ucldeep
+    urlcolor: ucldeep
+    citecolor: ucldeep
+    header-includes: |
+      \def\uclfooter{Survival Analysis: Parametric Models · Lecture I}
+---
+
+## Lectures I and II
+
+::: {.content-visible when-format="revealjs"}
+::: {.hidden}
+$$
+\newcommand{\btheta}{\boldsymbol{\theta}}
+\newcommand{\bbeta}{\boldsymbol{\beta}}
+\newcommand{\balpha}{\boldsymbol{\alpha}}
+\newcommand{\bx}{\mathbf{x}}
+\require{color}
+\definecolor{obscol}{RGB}{198,40,40}
+\definecolor{censcol}{RGB}{31,111,181}
+\newcommand{\obs}[1]{{\color{obscol}{#1}}}
+\newcommand{\cens}[1]{{\color{censcol}{#1}}}
+\newcommand{\exeq}{\overset{\text{(exercise)}}{=}}
+$$
+:::
+:::
+
+1.  Parametric survival analysis in the **overall survival** framework.
+2.  Parametric survival analysis in the **relative survival** framework.
+
+## Lecture aims
+
+1.  Describe the aims of survival analysis (overall survival).
+2.  Describe parametric approaches to estimating the survival function.
+3.  Describe two regression models: proportional hazards (PH) and accelerated failure time (AFT).
+4.  Present software tools for survival analysis, with a real data example.
+5.  Discuss other parametric, semiparametric and nonparametric alternatives.
+
+# Survival analysis {background-color="#341B51"}
+
+## Survival analysis in practice
+
+-   In many areas, such as medicine, biology and engineering (reliability), scientists have access to the survival times of a group of individuals or items.
+-   **Example 1.** The survival of cancer patients after a diagnosis of cancer.
+-   **Example 2.** The lifespan of a product or device.
+-   These two scenarios are identical from a theoretical perspective. In practice, however, the first one raises ethical considerations.
+
+## The typical data set
+
+-   A sample of **times to event**, possibly right-censored, $(t_1,\ldots,t_n)$, from a group of individuals.
+-   The vital status (or **censoring indicators**) $(\delta_1,\ldots,\delta_n)$: $\delta_i=1$ for death, $\delta_i=0$ for right-censored (alive). Censoring may be due to random drop-out, loss to follow-up, or administrative censoring.
+-   In some cases, we also know some characteristics of the individuals: **covariates** $\bx_i = (x_{i1},\ldots,x_{ip})^{\top}$, such as age, sex, deprivation level, comorbidities or tumour stage.
+-   **Overall survival:** in this framework, we know the times to event, but we do not consider the cause of death.
+
+## Censoring
+
+![](figures/censor){fig-align="center" width="78%"}
+
+## Aims of survival analysis
+
+One of the aims of survival analysis is to quantify the survival of a group of individuals. The typical quantities of interest are:
+
+1.  The **survival function**
+    $$
+    S(t) = 1- F(t) = \mathbb{P}(T>t),
+    $$
+    where $T$ is a positive random variable representing the survival time, with cdf $F$.
+2.  The **hazard function**, defined as the instantaneous risk:
+    $$
+    h(t) = \lim_{\Delta t \to 0} \dfrac{\mathbb{P}(t \leq T < t+\Delta t \mid T \geq t)}{\Delta t} \exeq \dfrac{f(t)}{S(t)}.
+    $$
+
+## Survival and hazard functions
+
+-   The hazard function and the survival function are linked through the relationship
+    $$
+    S(t) \exeq \exp\left\{ - \int_0^t h(s)\, ds \right\}.
+    $$
+-   The function $H(t) = \int_0^t h(s)\, ds$ is known as the **cumulative hazard function**.
+
+## The importance of the hazard function
+
+-   We are exposed to many forces of mortality: ageing, illnesses, natural disasters, accidents, crime, and so on.
+-   In biostatistics (and epidemiology), the hazard plays a key role, as it reflects these forces of mortality.
+
+# Parametric estimation without covariates {background-color="#341B51"}
+
+## Maximum likelihood estimation: no covariates
+
+-   Suppose that $(t_1,\ldots,t_n)$ are independent and identically distributed.
+-   Suppose that we are interested in estimating the survival function using a parametric distribution $F(\cdot \mid \btheta)$.
+-   Which distribution?
+
+## A brief catalogue of parametric distributions
+
+::: {.nonincremental}
+-   [Gamma](https://en.wikipedia.org/wiki/Gamma_distribution)
+-   [Weibull](https://en.wikipedia.org/wiki/Weibull_distribution)
+-   [Lognormal](https://en.wikipedia.org/wiki/Log-normal_distribution)
+-   [Log-logistic](https://en.wikipedia.org/wiki/Log-logistic_distribution)
+-   [Generalised gamma](https://en.wikipedia.org/wiki/Generalized_gamma_distribution)
+-   Among many others: [see this overview](https://rpubs.com/FJRubio/PGW).
+:::
+
+## Hazard shapes
+
+Different distributions can capture different shapes of the hazard function:
+
+-   **Weibull:** increasing, decreasing or constant.
+-   **Lognormal:** unimodal (up, then down).
+-   **Generalised gamma:** increasing, decreasing, bathtub or unimodal.
+
+. . .
+
+::: {.callout-important title="Warning" icon="false"}
+By selecting a parametric distribution from the catalogue, we are making assumptions about the possible shapes of the true hazard function. Selecting the model using formal tools is usually recommended.
+:::
+
+## Maximum likelihood estimation: no covariates
+
+-   We need to account for the different contributions of the $\obs{\text{observed}}$ and $\cens{\text{right-censored}}$ times:
+    $$
+    L(\btheta) = \prod_{i=1}^n \obs{f(t_i \mid \btheta)^{\delta_i}}\, \cens{S(t_i \mid \btheta)^{1-\delta_i}}.
+    $$
+-   The MLE $\widehat{\btheta}$ of $\btheta$ is the value that maximises the likelihood function (numerical methods are usually needed).
+-   The fitted survival and hazard functions are $S(t\mid \widehat{\btheta})$ and $h(t\mid \widehat{\btheta})$.
+
+## Software
+
+-   Since these are standard methods and distributions, many have already been implemented in R.
+-   For example, a number of distributions can be fitted to survival data using the [flexsurv](https://cran.r-project.org/web/packages/flexsurv/vignettes/flexsurv.pdf) R package.
+
+# Regression models {background-color="#341B51"}
+
+## Regression models: using covariates
+
+-   Spoiler: there is no unique way of including covariates in a model for survival times.
+-   Biostatisticians and epidemiologists tend to think in terms of the hazard, given the interpretation above. Unsurprisingly, most approaches to including covariates consist of **hazard-based regression models**.
+-   The most popular are the **proportional hazards (PH)** model and the **accelerated failure time (AFT)** model.
+
+## Proportional hazards models
+
+-   The PH model postulates that the covariates act on a "baseline hazard", either increasing or decreasing it. That is,
+    $$
+    h_{\text{PH}}(t \mid \bx_i, \btheta,\bbeta) = h_0(t \mid \btheta) \exp\left\{ \bx_i ^{\top}\bbeta\right\}.
+    $$
+-   The corresponding cumulative hazard function is
+    $$
+    H_{\text{PH}}(t \mid \bx_i, \btheta,\bbeta) \exeq H_0(t \mid \btheta) \exp\left\{ \bx_i ^{\top}\bbeta\right\}.
+    $$
+
+## Proportional hazards: interpretation
+
+-   $h_0(t \mid \btheta)$ is the hazard associated with $\bx_i = \mathbf{0}$, a sort of "reference point". It can be the hazard of any of the distributions discussed previously.
+-   If $\bx_i ^{\top}\bbeta >0$, then $h_{\text{PH}}(t \mid \bx_i, \btheta,\bbeta) > h_0(t \mid \btheta)$: for a fixed value of $\bbeta$, the individual's combination of characteristics leads to an **increase** in the hazard compared with the baseline hazard.
+-   If $\bx_i ^{\top}\bbeta <0$, then $h_{\text{PH}}(t \mid \bx_i, \btheta,\bbeta) < h_0(t \mid \btheta)$: the individual's combination of characteristics leads to a **decrease** in the hazard compared with the baseline hazard.
+
+## Proportional hazards: hazard ratios
+
+-   Let $\bx_i$ denote the characteristics of the $i$th patient and, for a specific $k\in\{1,\dots,p\}$, let $\tilde{\bx}_i$ be equal to $\bx_i$ except for its $k$th entry, $\tilde{x}_{ik} = x_{ik}+1$.
+-   Then,
+    $$
+    \dfrac{h_{\text{PH}}(t \mid \tilde{\bx}_i, \btheta,\bbeta)}{h_{\text{PH}}(t \mid \bx_i, \btheta,\bbeta)} \exeq \exp\{\beta_k\}.
+    $$
+    That is, $\exp\{\beta_k\}$ is the **hazard ratio** associated with a one-unit increase in the covariate $x_{ik}$, with all other covariates held fixed.
+
+## Accelerated failure time model
+
+-   The AFT model postulates that the covariates act simultaneously on the time scale and on the hazard scale:
+    $$
+    h_{\text{AFT}}(t \mid \bx_i, \btheta,\bbeta) = h_0\left(t \exp\left\{ \bx_i ^{\top}\bbeta\right\}\mid \btheta\right) \exp\left\{ \bx_i ^{\top}\bbeta\right\}.
+    $$
+-   The corresponding cumulative hazard function is
+    $$
+    H_{\text{AFT}}(t \mid \bx_i, \btheta,\bbeta) \exeq H_0\left(t \exp\left\{ \bx_i ^{\top}\bbeta\right\}\mid \btheta\right).
+    $$
+
+## AFT model: interpretation
+
+The interpretation of the AFT model is easier if we transform the model. The survival function is
+
+$$
+\begin{aligned}
+S_{\text{AFT}}(t_i \mid \bx_i, \btheta,\bbeta) &\exeq \exp \left\{- H_0\left(t_i \exp\left\{ \bx_i ^{\top}\bbeta\right\}\mid \btheta\right) \right\} \\
+&= S_0\left(t_i \exp\left\{ \bx_i ^{\top}\bbeta\right\}\mid \btheta\right)
+= 1-F_0\left(t_i \exp\left\{ \bx_i ^{\top}\bbeta\right\}\mid \btheta\right)\\
+&= \mathbb{P}\left( T_i > t_i \exp\left\{ \bx_i ^{\top}\bbeta\right\}\mid \btheta\right)
+= \mathbb{P}\left(\log T_i > \log(t_i) + \bx_i ^{\top}\bbeta \mid \btheta\right)\\
+&= \mathbb{P}\left(\log T_i > \log(t_i) - \bx_i ^{\top}\balpha \mid \btheta\right),
+\end{aligned}
+$$
+
+where $\balpha = -\bbeta$.
+
+## AFT model: interpretation (continued)
+
+-   Let $Y_i = \log(T_i)$ and $Y_i - \bx_i^{\top}\balpha \sim G_0(\cdot \mid \btheta)$, with pdf $g_0$.
+-   Then, writing $y_i = \log(t_i)$,
+    $$
+    \begin{aligned}
+    S_{\text{AFT}}(t_i \mid \bx_i, \btheta,\bbeta) &\leftrightarrow 1-G_0\left( y_i - \bx_i ^{\top}\balpha \mid \btheta\right),\\
+    f_{\text{AFT}}(t_i \mid \bx_i, \btheta,\bbeta) &\leftrightarrow g_0\left( y_i - \bx_i^{\top}\balpha \mid \btheta\right).
+    \end{aligned}
+    $$
+-   We can identify this pdf with that of a **log-linear model**:
+    $$
+    y_i = \log(t_i) = \bx_i ^{\top}\balpha + \epsilon_i, \qquad \epsilon_i \stackrel{\text{iid}}{\sim} G_0(\cdot \mid \btheta), \quad i=1,\dots,n.
+    $$
+-   Consequently, the covariates have a direct effect on the log survival time.
+
+## Regression models: the likelihood function
+
+-   The likelihood function for the PH and AFT models is, for $j\in\{\text{PH},\text{AFT}\}$,
+    $$
+    \begin{aligned}
+    L(\bbeta,\btheta) &= \prod_{i=1}^n \obs{f_{j}(t_i \mid \bx_i, \btheta,\bbeta)^{\delta_i}}\, \cens{S_{j}(t_i \mid \bx_i, \btheta,\bbeta)^{1-\delta_i}}\\
+    &\exeq \prod_{i=1}^n h_{j}(t_i \mid \bx_i, \btheta,\bbeta)^{\delta_i} \exp\left\{ - H_{j}(t_i \mid \bx_i, \btheta,\bbeta) \right\}.
+    \end{aligned}
+    $$
+-   This shows that the likelihood can be written entirely in terms of the hazard function.
+
+# Example: lung cancer data {background-color="#341B51"}
+
+## The data
+
+-   Survival times $t_i$, $i=1,\dots,228$, of patients with advanced lung cancer from the North Central Cancer Treatment Group (available as `lung` in the R package **survival**).
+-   165 patients died within the follow-up period (1,022 days).
+
+## No covariates
+
+-   We compare the survival functions of three parametric models: Weibull, lognormal and generalised gamma.
+-   R code: [Example: no covariates](https://rpubs.com/FJRubio/PSM){.pill}
+
+## Regression models
+
+-   We consider two covariates, age and sex.
+-   We first compare the PH and AFT models with a lognormal baseline hazard, and then with a Weibull baseline hazard (for which the PH and AFT models coincide).
+-   R code: [Example: regression](https://rpubs.com/FJRubio/PSRM){.pill}
+
+# Discussion {background-color="#341B51"}
+
+## Discussion
+
+-   Parametric survival models are useful tools in many applied areas.
+-   Their use is not automatic: the user needs to select the parametric model(s).
+-   PH and AFT models are the most popular hazard-based regression models.
+-   Confidence intervals for the parameters, and confidence bands for the estimated survival function, can also be obtained.
+
+## Extensions: parametric approaches
+
+::: {.nonincremental}
+-   The General Hazard (GH) model is an extension of the PH and AFT models.
+-   The GH model is discussed in Lecture II.
+-   The GH model is implemented in the R package [HazReg](https://github.com/FJRubio67/HazReg).
+-   Other model structures include the proportional odds model and related extensions.
+:::
+
+## Extensions: semiparametric and nonparametric approaches
+
+::: {.nonincremental}
+-   The **Kaplan–Meier estimator** is a nonparametric estimator of the survival function.
+-   The **Nelson–Aalen estimator** is a nonparametric estimator of the cumulative hazard function.
+-   The **Cox model** is a semiparametric version of the PH model.
+:::
+
+R code: [Cox proportional hazards model](https://rpubs.com/FJRubio/CPHM){.pill}
+
+## The Cox PH model and the partial likelihood
+
+-   The PH model:
+    $$
+    h_{\text{PH}}(t\mid \bx_i, \bbeta) = h_0(t)\exp\left\{\bx_i^{\top}\bbeta \right\}.
+    $$
+-   To avoid misspecifying the baseline hazard, it is often preferred to leave it unspecified (estimating it nonparametrically), while the coefficients $\bbeta$ are estimated using the log partial likelihood function [@cox:1972]:
+    $$
+    \ell_p(\bbeta) = \sum_{i:\,\delta_i=1} \bx_i^{\top}\bbeta - \sum_{i:\,\delta_i=1} \log\left( \sum_{k \in \mathcal{R}(t_i)} \exp\left\{\bx_k^{\top}\bbeta\right\}\right),
+    $$
+    where $\mathcal{R}(t) = \{k : t_k \geq t\}$ denotes the risk set at time $t$.
+
+## References
+
+::: {#refs}
+:::

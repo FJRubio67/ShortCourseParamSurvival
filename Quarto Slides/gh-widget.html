@@ -1,0 +1,72 @@
+<!-- Interactive GH-structure illustration (plain JavaScript: works offline and from file://).
+     Baseline: exponentiated Weibull hazard, scale 1, shape 0.5, power 5. -->
+<style>
+.gh-widget { margin-top: 0.4em; }
+.gh-widget .gh-controls { display: flex; align-items: center; gap: 0.6em; font-size: 0.75em; }
+.gh-widget input[type=range] { width: 18em; accent-color: #993BFF; }
+.gh-widget .gh-val { min-width: 3.2em; font-variant-numeric: tabular-nums; color: #341B51; font-weight: 700; }
+.gh-widget svg text { font-family: inherit; fill: #6B6676; }
+</style>
+<script>
+(function () {
+  function hEW(t, sigma, kappa, alpha) {
+    sigma = sigma || 1; kappa = kappa || 0.5; alpha = alpha || 5;
+    var z = Math.pow(t / sigma, kappa), Fw = 1 - Math.exp(-z);
+    var fw = kappa / sigma * Math.pow(t / sigma, kappa - 1) * Math.exp(-z);
+    var F = Math.pow(Fw, alpha), f = alpha * Math.pow(Fw, alpha - 1) * fw;
+    return f / (1 - F);
+  }
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function build(div) {
+    var mode = div.dataset.mode, ymax = +div.dataset.ymax;
+    var W = 1000, H = 330, L = 70, R = 20, T = 15, B = 50;
+    var sx = function (t) { return L + (W - L - R) * t / 10; };
+    var sy = function (h) { return H - B - (H - T - B) * Math.min(h, ymax) / ymax; };
+    var ctr = document.createElement("div"); ctr.className = "gh-controls";
+    ctr.innerHTML = '<span>' + div.dataset.label + '</span>';
+    var inp = document.createElement("input");
+    inp.type = "range"; inp.min = div.dataset.min; inp.max = div.dataset.max;
+    inp.step = div.dataset.step; inp.value = div.dataset.value;
+    var out = document.createElement("span"); out.className = "gh-val";
+    ctr.appendChild(inp); ctr.appendChild(out);
+    var svg = el("svg", {viewBox: "0 0 " + W + " " + H, width: "100%"});
+    // axes, grid and labels
+    for (var i = 0; i <= 5; i++) {
+      var y = ymax * i / 5;
+      el("line", {x1: L, x2: W - R, y1: sy(y), y2: sy(y), stroke: "#E6E1EE"}, svg);
+      el("text", {x: L - 10, y: sy(y) + 6, "text-anchor": "end", "font-size": 18}, svg).textContent = y.toFixed(2);
+    }
+    for (var t = 0; t <= 10; t += 2) {
+      el("text", {x: sx(t), y: H - B + 26, "text-anchor": "middle", "font-size": 18}, svg).textContent = t;
+    }
+    el("line", {x1: L, x2: W - R, y1: H - B, y2: H - B, stroke: "#6B6676"}, svg);
+    el("text", {x: (L + W - R) / 2, y: H - 4, "text-anchor": "middle", "font-size": 20}, svg).textContent = "t";
+    el("text", {x: W - R, y: T + 18, "text-anchor": "end", "font-size": 18}, svg).textContent = "dashed: baseline hazard";
+    var grid = [];
+    for (var j = 1; j <= 400; j++) grid.push(10 * j / 400);
+    function path(fun) {
+      return grid.map(function (t, k) { return (k ? "L" : "M") + sx(t).toFixed(1) + "," + sy(fun(t)).toFixed(1); }).join("");
+    }
+    el("path", {d: path(function (t) { return hEW(t); }), fill: "none", stroke: "#341B51", "stroke-width": 3, "stroke-dasharray": "8,6"}, svg);
+    var curve = el("path", {fill: "none", stroke: "#993BFF", "stroke-width": 4}, svg);
+    function update() {
+      var b = +inp.value;
+      out.textContent = (b >= 0 ? "+" : "") + b.toFixed(2);
+      curve.setAttribute("d", path(mode === "time"
+        ? function (t) { return hEW(t * Math.exp(b)); }
+        : function (t) { return hEW(t) * Math.exp(b); }));
+    }
+    inp.addEventListener("input", update);
+    // keep reveal.js from hijacking arrow keys while the slider has focus
+    inp.addEventListener("keydown", function (e) { e.stopPropagation(); });
+    div.appendChild(ctr); div.appendChild(svg); update();
+  }
+  document.querySelectorAll(".gh-widget").forEach(build);
+})();
+</script>
